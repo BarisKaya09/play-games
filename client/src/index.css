@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #0a0a0a;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#game-details {
+  animation: game-details-anim 0.3s ease-in;
+}
+
+@keyframes game-details-anim {
+  0% {
+    scale: 0.1;
+    opacity: 0;
+    border-radius: 100%;
+  }
+
+  100% {
+    scale: 1;
+    opacity: 1;
+    border-radius: 0%;
+  }
+}
+
+.top-to-bottom {
+  animation: top-to-bottom-animate 1s ease-out;
+}
+
+@keyframes top-to-bottom-animate {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.bottom-to-top {
+  animation: bottom-to-top-animate 0.5s;
+}
+
+@keyframes bottom-to-top-animate {
+  0% {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.left-to-right {
+  animation: left-to-right--animate 1s ease-out;
+}
+
+@keyframes left-to-right--animate {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.right-to-left {
+  animation: right-to-left--animate 0.5s;
+}
+
+@keyframes right-to-left--animate {
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
