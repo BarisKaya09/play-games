@@ -9,3 +9,5 @@ Bir çok oyunun bulunduğu ve bu oyunlarda elde ettiğiniz başarıları görebi
 > bun install
 
 > bun run dev
+
+**PROJE ve README yapım Aşamasında...**
