@@ -89,7 +89,7 @@ export enum ErrorMessage {
 
   ITEM_NOT_FOUND_IN_USER_INVENTORY = "Envanterinizde bu item bulunamadı!",
   YOU_HAVE_EXCEEDED_THE_AMOUNT_SENSITIVITY = "Tutar hassasiyetini aştınız!",
-  YOU_HAVE_EXCEEDED_THE_ITEM_STACK = "B kadar ürünu stoğunuz yok!",
+  YOU_HAVE_EXCEEDED_THE_ITEM_STACK = "Bu kadar ürünu stoğunuz yok!",
 
   MARKET_IS_EMPTY = "Market Boş!",
   MARKET_ITEM_NOT_FOUND = "Markette bu item bulunamadı!",
