@@ -3,6 +3,7 @@ import requireAuth from "../middlewares/requireAuth";
 import {
   buyItemInDailyMarket,
   buyItemInMarket,
+  deleteItemInMarket,
   getDailyMarket,
   getMarket,
   getUserInventory,
@@ -17,5 +18,6 @@ router.post("/buyItemInDailyMarket", requireAuth, buyItemInDailyMarket);
 router.post("/buyItemInMarket", requireAuth, buyItemInMarket);
 router.post("/sellItemInMarket", requireAuth, sellItemInMarket);
 router.get("/getMarket", requireAuth, getMarket);
+router.post("/deleteItemInMarket", requireAuth, deleteItemInMarket);
 
 export default router;

@@ -358,3 +358,51 @@ export const getMarket = async (req: express.Request, res: express.Response) => 
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }
 };
+
+type DeleteItemInMarket = {
+  ownerID: string;
+  itemID: string;
+};
+export const deleteItemInMarket = async (req: express.Request, res: express.Response) => {
+  try {
+    const { ownerID, itemID } = req.body as DeleteItemInMarket;
+    if (!ownerID || !itemID) {
+      res.status(MISSING_CONTENT.status).json(MISSING_CONTENT);
+      return;
+    }
+
+    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const user = await userRepo.findUser({ id: ownerID });
+    if (!user) {
+      res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
+      return;
+    }
+
+    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const userInventory = await inventoryRepo.findOneInventory({ user_id: user.id });
+    if (!userInventory) {
+      res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
+      return;
+    }
+
+    const marketRepo = new MarketRepository(process.env.MONGODB_URI as string);
+    const deletedItem = await marketRepo.findOneItem({ itemID: itemID });
+    if (!deletedItem) {
+      res.status(MARKET_ITEM_NOT_FOUND.status).json(MARKET_ITEM_NOT_FOUND);
+      return;
+    }
+
+    await marketRepo.deleteOneItem({ itemID: deletedItem.itemID });
+
+    userInventory.items.push({ itemID: deletedItem.itemID, item: deletedItem.item, value: deletedItem.value } as InventoryItem);
+    await inventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: userInventory.items } });
+
+    await userRepo.close();
+    await inventoryRepo.close();
+    await marketRepo.close();
+
+    res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Eşya marketten kaldırıldı!" } as SuccessResponse);
+  } catch (err: any) {
+    res.status(ANY_ERROR.status).json(ANY_ERROR);
+  }
+};
