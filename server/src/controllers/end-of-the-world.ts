@@ -3,19 +3,24 @@ import {
   ANY_ERROR,
   DAILY_MARKET_ITEM_NOT_FOUND,
   DAILY_MARKET_NOT_FOUND,
+  DIFFERENT_ITEMS,
   INVALID_AMOUNT,
+  ITEM_CANNOT_BE_STACKED,
   ITEM_NOT_FOUND_IN_USER_INVENTORY,
   MARKET_IS_EMPTY,
   MARKET_ITEM_NOT_FOUND,
   MISSING_CONTENT,
   NOT_ENOUGH_STOCK,
   StatusCode,
+  THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME,
+  THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME,
   USER_INVENTORY_NOT_FOUND,
   USER_NOT_EXIST,
   YOU_CANNOT_BUY_YOUR_OWN_ITEM,
   YOU_DONT_HAVE_ENOUGH_MONEY_FOR_THIS_ITEM,
   YOU_HAVE_EXCEEDED_THE_AMOUNT_SENSITIVITY,
   YOU_HAVE_EXCEEDED_THE_ITEM_STACK,
+  YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE,
   type SuccessResponse,
 } from "../lib/response";
 import { UserRepository } from "../repository/mongodb/user";
@@ -23,6 +28,7 @@ import { InventoryRepository, type InventoryItem } from "../repository/mongodb/e
 import { DailyMarketRepository } from "../repository/mongodb/end-of-the-world/daily-market";
 import { v4 as uuidV4 } from "uuid";
 import { MarketRepository } from "../repository/mongodb/end-of-the-world/market";
+import { ItemType } from "../repository/mongodb/end-of-the-world/items";
 
 export const getUserInventory = async (req: express.Request, res: express.Response) => {
   try {
@@ -406,3 +412,84 @@ export const deleteItemInMarket = async (req: express.Request, res: express.Resp
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }
 };
+
+type StackTheItemInInventory = {
+  subItemID: string;
+  itemID: string;
+};
+export const stacKTheItemInInventory = async (req: express.Request, res: express.Response) => {
+  try {
+    const { subItemID, itemID } = req.body as StackTheItemInInventory;
+    if (!subItemID || !itemID) {
+      res.status(MISSING_CONTENT.status).json(MISSING_CONTENT);
+      return;
+    }
+
+    const username = req.cookies.username as string;
+    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const user = await userRepo.findUser({ username: username });
+    if (!user) {
+      res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
+      return;
+    }
+
+    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const userInventory = await inventoryRepo.findOneInventory({ user_id: user.id });
+    if (!userInventory) {
+      res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
+      return;
+    }
+
+    const subItem = userInventory.items.find((item) => item.itemID == subItemID);
+    if (!subItem) {
+      res.status(ITEM_NOT_FOUND_IN_USER_INVENTORY.status).json(ITEM_NOT_FOUND_IN_USER_INVENTORY);
+      return;
+    }
+
+    const item = userInventory.items.find((item) => item.itemID == itemID);
+    if (!item) {
+      res.status(ITEM_NOT_FOUND_IN_USER_INVENTORY.status).json(ITEM_NOT_FOUND_IN_USER_INVENTORY);
+      return;
+    }
+
+    if (subItem.item.name != item.item.name) {
+      res.status(DIFFERENT_ITEMS.status).json(DIFFERENT_ITEMS);
+      return;
+    }
+
+    if (subItem.item.itemType != item.item.itemType) {
+      res.status(THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME.status).json(THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME);
+      return;
+    }
+
+    if (subItem.item.rarity != item.item.rarity) {
+      res.status(THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME.status).json(THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME);
+      return;
+    }
+
+    if ((!("stack" in subItem.item) && subItem.item.itemType == ItemType.Container) || ("stack" in subItem.item && !subItem.item.stackable)) {
+      res.status(ITEM_CANNOT_BE_STACKED.status).json(ITEM_CANNOT_BE_STACKED);
+      return;
+    }
+
+    if ("stack" in item.item && "stack" in subItem.item && item.item.stack + subItem.item.stack > subItem.item.stackSize) {
+      res.status(YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE.status).json(YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE);
+      return;
+    }
+
+    if ("stack" in subItem.item && "stack" in item.item) {
+      subItem.item.stack += item.item.stack;
+    }
+
+    await inventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: userInventory.items.filter((item) => item.itemID != itemID) } });
+
+    await userRepo.close();
+    await inventoryRepo.close();
+
+    res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Öğeler istiflendi!" } as SuccessResponse);
+  } catch (err: any) {
+    res.status(ANY_ERROR.status).json(ANY_ERROR);
+  }
+};
+
+//TODO: Oyuncular arası trade (Ama bunun için websocet gerekecek).

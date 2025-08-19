@@ -8,6 +8,7 @@ import {
   getMarket,
   getUserInventory,
   sellItemInMarket,
+  stacKTheItemInInventory,
 } from "../controllers/end-of-the-world";
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.post("/buyItemInMarket", requireAuth, buyItemInMarket);
 router.post("/sellItemInMarket", requireAuth, sellItemInMarket);
 router.get("/getMarket", requireAuth, getMarket);
 router.post("/deleteItemInMarket", requireAuth, deleteItemInMarket);
+router.post("/stacKTheItemInInventory", requireAuth, stacKTheItemInInventory);
 
 export default router;

@@ -28,6 +28,11 @@ export enum Error {
 
   ITEM_NOT_FOUND = "ITEM_NOT_FOUND",
   ITEM_TYPE_NOT_FOUND = "ITEM_TYPE_NOT_FOUND",
+  ITEM_CANNOT_BE_STACKED = "ITEM_CANNOT_BE_STACKED",
+  DIFFERENT_ITEMS = "DIFFERENT_ITEMS",
+  THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME = "THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME",
+  YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE = "YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE",
+  THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME = "THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME",
 
   USER_INVENTORY_NOT_FOUND = "USER_INVENTORY_NOT_FOUND",
 
@@ -67,6 +72,11 @@ export enum ErrorMessage {
 
   ITEM_NOT_FOUND = "İtem bulunamadı!",
   ITEM_TYPE_NOT_FOUND = "Böyle bir item tipi yok!",
+  ITEM_CANNOT_BE_STACKED = "İtem İstiflenemez!",
+  DIFFERENT_ITEMS = "İtemler farklı!",
+  THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME = "İstiflenmek istenilen öğelerin tipleri aynı değil!",
+  YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE = "Öğe istif sınırını aştınız!",
+  THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME = "İstiflenmek istenen öğelerin nadirlikleri aynı değil!",
 
   USER_INVENTORY_NOT_FOUND = "Kullanıcı envanteri bulunamadı!",
 
@@ -79,7 +89,7 @@ export enum ErrorMessage {
 
   ITEM_NOT_FOUND_IN_USER_INVENTORY = "Envanterinizde bu item bulunamadı!",
   YOU_HAVE_EXCEEDED_THE_AMOUNT_SENSITIVITY = "Tutar hassasiyetini aştınız!",
-  YOU_HAVE_EXCEEDED_THE_ITEM_STACK = "Bu kadar ürün stoğunuz yok!",
+  YOU_HAVE_EXCEEDED_THE_ITEM_STACK = "B kadar ürünu stoğunuz yok!",
 
   MARKET_IS_EMPTY = "Market Boş!",
   MARKET_ITEM_NOT_FOUND = "Markette bu item bulunamadı!",
@@ -288,5 +298,45 @@ export const YOU_CANNOT_BUY_YOUR_OWN_ITEM: UnsuccessResponse = {
   error: {
     error: Error.YOU_CANNOT_BUY_YOUR_OWN_ITEM,
     message: ErrorMessage.YOU_CANNOT_BUY_YOUR_OWN_ITEM,
+  },
+} as UnsuccessResponse;
+
+export const ITEM_CANNOT_BE_STACKED: UnsuccessResponse = {
+  status: StatusCode.BadRequest,
+  error: {
+    error: Error.ITEM_CANNOT_BE_STACKED,
+    message: ErrorMessage.ITEM_CANNOT_BE_STACKED,
+  },
+} as UnsuccessResponse;
+
+export const YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE: UnsuccessResponse = {
+  status: StatusCode.BadRequest,
+  error: {
+    error: Error.YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE,
+    message: ErrorMessage.YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE,
+  },
+} as UnsuccessResponse;
+
+export const THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME: UnsuccessResponse = {
+  status: StatusCode.BadRequest,
+  error: {
+    error: Error.THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME,
+    message: ErrorMessage.THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME,
+  },
+} as UnsuccessResponse;
+
+export const THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME: UnsuccessResponse = {
+  status: StatusCode.BadRequest,
+  error: {
+    error: Error.THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME,
+    message: ErrorMessage.THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME,
+  },
+} as UnsuccessResponse;
+
+export const DIFFERENT_ITEMS: UnsuccessResponse = {
+  status: StatusCode.BadRequest,
+  error: {
+    error: Error.DIFFERENT_ITEMS,
+    message: ErrorMessage.DIFFERENT_ITEMS,
   },
 } as UnsuccessResponse;
