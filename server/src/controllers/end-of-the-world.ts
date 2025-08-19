@@ -358,18 +358,3 @@ export const getMarket = async (req: express.Request, res: express.Response) => 
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }
 };
-
-type UpdateItemValueInMarket = {
-  newValue: number;
-};
-export const updateItemValueInMarket = (req: express.Request, res: express.Response) => {
-  try {
-    const { newValue } = req.body as UpdateItemValueInMarket;
-    if (!newValue) {
-      res.status(MISSING_CONTENT.status).json(MISSING_CONTENT);
-      return;
-    }
-  } catch (err: any) {
-    res.status(ANY_ERROR.status).json(ANY_ERROR);
-  }
-};
