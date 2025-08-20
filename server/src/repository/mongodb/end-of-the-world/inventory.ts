@@ -1,5 +1,5 @@
 import { MongoClient, type Collection, type Document, type UpdateFilter, type UpdateResult } from "mongodb";
-import type { Item } from "./items";
+import type { Item } from "./data/items";
 
 const BASE_MONEY = 500;
 

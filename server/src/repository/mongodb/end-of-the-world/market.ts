@@ -1,5 +1,5 @@
 import { Collection, FindCursor, MongoClient, type Document, type UpdateFilter, type UpdateResult } from "mongodb";
-import type { Item } from "./items";
+import type { Item } from "./data/items";
 import { v4 as uuidV4 } from "uuid";
 
 type MarketItem = {

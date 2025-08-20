@@ -28,7 +28,7 @@ import { InventoryRepository, type InventoryItem } from "../repository/mongodb/e
 import { DailyMarketRepository } from "../repository/mongodb/end-of-the-world/daily-market";
 import { v4 as uuidV4 } from "uuid";
 import { MarketRepository } from "../repository/mongodb/end-of-the-world/market";
-import { ItemType } from "../repository/mongodb/end-of-the-world/items";
+import { ItemType } from "../repository/mongodb/end-of-the-world/data/items";
 
 export const getUserInventory = async (req: express.Request, res: express.Response) => {
   try {
@@ -491,5 +491,7 @@ export const stacKTheItemInInventory = async (req: express.Request, res: express
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }
 };
+
+//TODO: Eşyaları ayırma
 
 //TODO: Oyuncular arası trade (Ama bunun için websocet gerekecek).

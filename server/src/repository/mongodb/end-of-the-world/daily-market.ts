@@ -1,5 +1,5 @@
 import { MongoClient, type Collection, type Document, type UpdateFilter, type UpdateResult } from "mongodb";
-import { allItems, Rarity, type Item } from "./items";
+import { allItems, Rarity, type Item } from "./data/items";
 import { v4 as uuidV4 } from "uuid";
 
 const MAX_DAILY_MARKET_ITEM = 50;
