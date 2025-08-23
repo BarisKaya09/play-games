@@ -186,7 +186,27 @@ export const West: Region = {
 export const East: Region = {
   region: Regions.East,
   difficulty: "medium",
-  items: [],
+  items: [
+    Water,
+    Meat,
+    RottenMeat,
+    TShirt,
+    Shorts,
+    Pants,
+    Sneakers,
+    MotorcycleHelmet,
+    Colt1911,
+    AK47,
+    Remington870,
+    Machete,
+    LouisvilleSlugger,
+    StanleyCrowbar,
+    ...containerItems,
+    PistolBullet,
+    RifleBullet,
+    PumpgunBullet,
+    Bandage,
+  ],
   effects: [Hot("medium"), HuntingOpportunity("medium"), WildAnimalThreat("high")],
 } as Region;
 
