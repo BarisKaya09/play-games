@@ -34,15 +34,15 @@ export enum FoodEffects {
 
 const getItemValue = (rarity: Rarity): number => {
   switch (rarity) {
-    case "Yaygın":
+    case Rarity.Common:
       return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
-    case "Yaygın Değil":
+    case Rarity.Uncommon:
       return Math.floor(Math.random() * (150 - 100 + 1)) + 100;
-    case "Nadir":
+    case Rarity.Rare:
       return Math.floor(Math.random() * (300 - 200 + 1)) + 200;
-    case "Epik":
+    case Rarity.Epic:
       return Math.floor(Math.random() * (700 - 500 + 1)) + 500;
-    case "Efsane":
+    case Rarity.Legendary:
       return Math.floor(Math.random() * (2500 - 2000 + 1)) + 2000;
     default:
       return 0;
@@ -463,7 +463,159 @@ export const RottenMeat: Food = {
   getValue: (): number => getItemValue(Rarity.Common),
 } as Food;
 
-export const foodItems: Array<Food> = [CannedBeans, SurvivalBiscuits, AncientChocolateBar, Somon, Water, Meat, RottenMeat];
+export const SmallTrout: Food = {
+  name: "Küçük Alabalık",
+  itemType: ItemType.Food,
+  rarity: Rarity.Common,
+
+  stack: 0,
+  stackSize: 10,
+  stackable: true,
+
+  hungerRestoration: "low",
+  decayLevel: "fresh",
+
+  foodEffects: [IncreaseThirst("low"), ReduceHunger("medium"), IncreaseEnergy("medium")],
+
+  getValue: (): number => getItemValue(Rarity.Common),
+} as Food;
+
+export const Perch: Food = {
+  name: "Sarı Levrek",
+  itemType: ItemType.Food,
+  rarity: Rarity.Common,
+
+  stack: 0,
+  stackSize: 10,
+  stackable: true,
+
+  hungerRestoration: "low",
+  decayLevel: "fresh",
+
+  foodEffects: [IncreaseThirst("low"), ReduceHunger("medium"), IncreaseEnergy("medium")],
+
+  getValue: (): number => getItemValue(Rarity.Common),
+} as Food;
+
+export const ArcticChar: Food = {
+  name: "Kutup Balığı",
+  itemType: ItemType.Food,
+  rarity: Rarity.Uncommon,
+
+  stack: 0,
+  stackSize: 5,
+  stackable: true,
+
+  hungerRestoration: "medium",
+  decayLevel: "fresh",
+
+  foodEffects: [IncreaseThirst("very-low"), ReduceHunger("high"), IncreaseEnergy("medium")],
+
+  getValue: (): number => getItemValue(Rarity.Uncommon),
+} as Food;
+
+export const NorthernPike: Food = {
+  name: "Turna Balığı",
+  itemType: ItemType.Food,
+  rarity: Rarity.Uncommon,
+
+  stack: 0,
+  stackSize: 5,
+  stackable: true,
+
+  hungerRestoration: "medium",
+  decayLevel: "fresh",
+
+  foodEffects: [IncreaseThirst("very-low"), ReduceHunger("high"), IncreaseEnergy("medium")],
+
+  getValue: (): number => getItemValue(Rarity.Uncommon),
+} as Food;
+
+export const Whitefish: Food = {
+  name: "Beyaz Balık",
+  itemType: ItemType.Food,
+  rarity: Rarity.Uncommon,
+
+  stack: 0,
+  stackSize: 5,
+  stackable: true,
+
+  hungerRestoration: "medium",
+  decayLevel: "fresh",
+
+  foodEffects: [IncreaseThirst("very-low"), ReduceHunger("high"), IncreaseEnergy("medium")],
+
+  getValue: (): number => getItemValue(Rarity.Uncommon),
+} as Food;
+
+export const IceSalmon: Food = {
+  name: "Buz Somonu",
+  itemType: ItemType.Food,
+  rarity: Rarity.Rare,
+
+  stack: 0,
+  stackSize: 3,
+  stackable: true,
+
+  hungerRestoration: "high",
+  decayLevel: "fresh",
+
+  foodEffects: [ReduceHunger("high"), IncreaseEnergy("high")],
+
+  getValue: (): number => getItemValue(Rarity.Rare),
+} as Food;
+
+export const CrystalCarp: Food = {
+  name: "Kristal Sazan",
+  itemType: ItemType.Food,
+  rarity: Rarity.Rare,
+
+  stack: 0,
+  stackSize: 3,
+  stackable: true,
+
+  hungerRestoration: "high",
+  decayLevel: "fresh",
+
+  foodEffects: [ReduceHunger("high"), IncreaseEnergy("high")],
+
+  getValue: (): number => getItemValue(Rarity.Rare),
+} as Food;
+
+export const AncientIcefish: Food = {
+  name: "Antik Buz Balığı",
+  itemType: ItemType.Food,
+  rarity: Rarity.Legendary,
+
+  stack: 0,
+  stackSize: 0,
+  stackable: false,
+
+  hungerRestoration: "very-high",
+  decayLevel: "fresh",
+
+  foodEffects: [ReduceThirst("very-high"), ReduceHunger("very-high"), IncreaseEnergy("very-high")],
+
+  getValue: (): number => getItemValue(Rarity.Rare),
+} as Food;
+
+export const foodItems: Array<Food> = [
+  CannedBeans,
+  SurvivalBiscuits,
+  AncientChocolateBar,
+  Somon,
+  Water,
+  Meat,
+  RottenMeat,
+  SmallTrout,
+  Perch,
+  ArcticChar,
+  NorthernPike,
+  Whitefish,
+  IceSalmon,
+  CrystalCarp,
+  AncientIcefish,
+];
 
 // ---------------------- Food items ---------------------- //
 

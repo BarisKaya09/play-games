@@ -1,14 +1,19 @@
 import {
   AK47,
+  AncientIcefish,
+  ArcticChar,
   Bandage,
   bulletItems,
   CargoPants,
   Colt1911,
   containerItems,
+  CrystalCarp,
   DiamondEarring,
   foodItems,
   GoldRing,
   HeavyMilitaryHelmet,
+  IceSalmon,
+  ItemType,
   Jacket,
   LightMilitaryHelmet,
   LouisvilleSlugger,
@@ -20,8 +25,10 @@ import {
   MilitaryBoots,
   MilitaryJacket,
   MotorcycleHelmet,
+  NorthernPike,
   OldPainting,
   Pants,
+  Perch,
   PistolBullet,
   PumpgunBullet,
   Remington870,
@@ -29,12 +36,14 @@ import {
   RottenMeat,
   Shorts,
   SilverNecklace,
+  SmallTrout,
   Sneakers,
   StanleyCrowbar,
   Sweater,
   TShirt,
   Water,
   weaponItems,
+  Whitefish,
   type Item,
 } from "./items";
 
@@ -223,10 +232,49 @@ type AreaEffect = {
 
 export type Area = {
   region: Region;
-  locations: Array<Location>;
-  effects: AreaEffect;
+  items: Array<Item>;
+  effects: Array<AreaEffect>;
 };
 
-// *************************** Area ***************************
+// *************************** North Areas ***************************
 
-export type Location = {};
+export const MilitaryBase: Area = {
+  region: North,
+  items: [
+    ...North.items.filter(
+      (item) =>
+        item.itemType == ItemType.Weapon ||
+        item.itemType == ItemType.Bullet ||
+        item.itemType == ItemType.Medical ||
+        (item.itemType == ItemType.Clothes &&
+          (item.name == MilitaryJacket.name ||
+            item.name == CargoPants.name ||
+            item.name == LightMilitaryHelmet.name ||
+            item.name == HeavyMilitaryHelmet.name))
+    ),
+  ],
+  effects: [],
+} as Area;
+
+export const FrozenLakeArea: Area = {
+  region: North,
+  items: [
+    ...North.items.filter(
+      (item) =>
+        item.itemType == ItemType.Food &&
+        (item.name == SmallTrout.name ||
+          item.name == Perch.name ||
+          item.name == ArcticChar.name ||
+          item.name == NorthernPike.name ||
+          item.name == Whitefish.name ||
+          item.name == IceSalmon.name ||
+          item.name == CrystalCarp.name ||
+          item.name == AncientIcefish.name)
+    ),
+  ],
+  effects: [],
+} as Area;
+
+// *************************** North Areas ***************************
+
+// *************************** Area ***************************
