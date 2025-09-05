@@ -112,6 +112,7 @@ const WildAnimalThreat = (effect: Effect): RegionEffect => {
 
 export type Region = {
   region: Regions;
+  name: string;
   difficulty: "easy" | "medium" | "hard";
   items: Array<Item>;
   effects: Array<RegionEffect>;
@@ -119,6 +120,7 @@ export type Region = {
 
 export const North: Region = {
   region: Regions.North,
+  name: "Kuzey",
   difficulty: "hard",
   items: [
     ...foodItems,
@@ -140,6 +142,7 @@ export const North: Region = {
 
 export const South: Region = {
   region: Regions.South,
+  name: "Güney",
   difficulty: "medium",
   items: [
     Water,
@@ -168,6 +171,7 @@ export const South: Region = {
 
 export const West: Region = {
   region: Regions.West,
+  name: "Batı",
   difficulty: "medium",
   items: [
     ...foodItems,
@@ -194,6 +198,7 @@ export const West: Region = {
 
 export const East: Region = {
   region: Regions.East,
+  name: "Doğu",
   difficulty: "medium",
   items: [
     Water,
@@ -222,7 +227,12 @@ export const East: Region = {
 // *************************** Region ***************************
 
 // *************************** Area ***************************
-enum AreaEffects {}
+enum AreaEffects {
+  AmbushRisk = "AmbushRisk",
+  TrapHazard = "TrapHazard",
+  ThinIceDanger = "ThinIceDanger",
+  BanditThreat = "BanditThreat",
+}
 
 type AreaEffect = {
   areaEffect: AreaEffects;
@@ -230,8 +240,42 @@ type AreaEffect = {
   effect: Effect;
 };
 
+const AmbushRisk = (effect: Effect): AreaEffect => {
+  return {
+    areaEffect: AreaEffects.AmbushRisk,
+    description: "Yağmacı çeteler pusuda olabilir.",
+    effect: effect,
+  } as AreaEffect;
+};
+
+const TrapHazard = (effect: Effect): AreaEffect => {
+  return {
+    areaEffect: AreaEffects.TrapHazard,
+    description: "Eski mayınlar veya patlayıcılar olabilir.",
+    effect: effect,
+  } as AreaEffect;
+};
+
+const ThinIceDanger = (effect: Effect): AreaEffect => {
+  return {
+    areaEffect: AreaEffects.ThinIceDanger,
+    description: "Buz kırılırsa hasar veya ölüm riski.",
+    effect: effect,
+  } as AreaEffect;
+};
+
+const BanditThreat = (effect: Effect): AreaEffect => {
+  return {
+    areaEffect: AreaEffects.BanditThreat,
+    description: "BanditThreat",
+    effect: effect,
+  } as AreaEffect;
+};
+
 export type Area = {
   region: Region;
+  name: string;
+  description: string;
   items: Array<Item>;
   effects: Array<AreaEffect>;
 };
@@ -240,6 +284,9 @@ export type Area = {
 
 export const MilitaryBase: Area = {
   region: North,
+  name: "Askeri Üs",
+  description:
+    "Eski bir askeri üs. Çevrede terk edilmiş barakalar, mühimmat sandıkları ve ilaç depoları bulunur. Burada genellikle silahlar, cephaneler ve tıbbi malzemeler bulunabilir. Ayrıca askeri teçhizat ve zırh parçaları da keşfedilebilir. Ancak üs, geçmiş savaşın izlerini taşır; tehlikeli olabilir",
   items: [
     ...North.items.filter(
       (item) =>
@@ -253,11 +300,14 @@ export const MilitaryBase: Area = {
             item.name == HeavyMilitaryHelmet.name))
     ),
   ],
-  effects: [],
+  effects: [AmbushRisk("high"), TrapHazard("medium")],
 } as Area;
 
 export const FrozenLakeArea: Area = {
   region: North,
+  name: "Donmuş Göl",
+  description:
+    "Donmuş bir göl. Buz tabakasının altında yaşam hâlâ devam ediyor. Burada oltayla veya basit araçlarla balık tutulabilir. Çoğunlukla küçük alabalık (Small Trout), levrek (Perch), kutup balığı (Arctic Char), turna (Northern Pike) ve beyaz balık (Whitefish) bulunur. Daha nadir olarak buz somonu (Ice Salmon), kristal sazan (Crystal Carp) ve efsanevi eski buz balığı (Ancient Icefish) yakalanabilir. Ancak buzun kırılma tehlikesi her zaman vardır.",
   items: [
     ...North.items.filter(
       (item) =>
@@ -272,7 +322,26 @@ export const FrozenLakeArea: Area = {
           item.name == AncientIcefish.name)
     ),
   ],
-  effects: [],
+  effects: [ThinIceDanger("medium")],
+} as Area;
+
+export const AbandonedVillageArea: Area = {
+  region: North,
+  name: "Terk Edilmiş Köy",
+  description:
+    "Yıllar önce terk edilmiş, yıkık dökük bir köy. Harabelerde yiyecek kalıntıları, eski sandıklar ve bazı tıbbi malzemeler bulunabilir. Ayrıca köylülerden kalma giysiler (kazak, mont, pantolon) de ele geçirilebilir. Ancak köy, yağmacıların uğrak noktası olabilir ve yapıların çökme tehlikesi vardır.",
+  items: [
+    ...North.items.filter(
+      (item) =>
+        item.itemType == ItemType.Food ||
+        item.itemType == ItemType.Container ||
+        item.itemType == ItemType.Medical ||
+        item.name == Sweater.name ||
+        item.name == Jacket.name ||
+        item.name == Pants.name
+    ),
+  ],
+  effects: [BanditThreat("high")],
 } as Area;
 
 // *************************** North Areas ***************************
