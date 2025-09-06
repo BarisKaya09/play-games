@@ -449,6 +449,17 @@ export const RuinedVillage: Area = {
   ],
   effects: [AmbushRisk("low"), RestPoint("low")],
 } as Area;
+
+export const AbandonedMall: Area = {
+  region: West,
+  name: "Terk Edilmiş Alışveriş Merkezi",
+  description: "Şehrin lüks alışveriş merkezi. İçinde yiyecek kalıntıları, değerli eşyalar ve saklanmış malzemeler olabilir.",
+  items: [...West.items.filter((item) => item.itemType == ItemType.Food || item.itemType == ItemType.Clothes || item.itemType == ItemType.Valuable)],
+  effects: [AmbushRisk("low")],
+} as Area;
 // *************************** West Areas ***************************
+
+// *************************** East Areas ***************************
+// *************************** East Areas ***************************
 
 // *************************** Area ***************************
