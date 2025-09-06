@@ -234,6 +234,7 @@ enum AreaEffects {
   ThinIceDanger = "ThinIceDanger",
   RestPoint = "RestPoint",
   ScorpionEncounter = "ScorpionEncounter",
+  RustInjury = "RustInjury",
 }
 
 type AreaEffect = {
@@ -278,6 +279,14 @@ const ScorpionEncounter = (effect: Effect): AreaEffect => {
   return {
     areaEffect: AreaEffects.ScorpionEncounter,
     description: "Çöl böcekleri/akrepler saldırabilir.",
+    effect: effect,
+  } as AreaEffect;
+};
+
+const RustInjury = (effect: Effect): AreaEffect => {
+  return {
+    areaEffect: AreaEffects.RustInjury,
+    description: "Keskin, paslı metal yüzünden yaralanma riski → kanama/yaralanma.",
     effect: effect,
   } as AreaEffect;
 };
@@ -404,5 +413,42 @@ export const BuriedRuins: Area = {
 } as Area;
 
 // *************************** South Areas ***************************
+
+// *************************** West Areas ***************************
+export const AbandonedFactory: Area = {
+  region: West,
+  name: "Terk Edilmiş Fabrika",
+  description: "Savaş öncesinden kalma üretim tesisi. Hurda metal, silah parçaları ve konteynerler bulunabilir.",
+  items: [
+    ...West.items.filter(
+      (name) =>
+        name.itemType == ItemType.Weapon ||
+        name.itemType == ItemType.Bullet ||
+        name.itemType == ItemType.Container ||
+        name.itemType == ItemType.Medical
+    ),
+  ],
+  effects: [RustInjury("medium"), AmbushRisk("medium")],
+} as Area;
+
+export const RuinedVillage: Area = {
+  region: West,
+  name: "Harap Köy",
+  description:
+    "Batı’daki köylerden biri savaşta harap olmuş. Evler kısmen ayakta, bazı binalar yağmalanmış ama hala kullanılabilir eşyalar bulunabilir.",
+  items: [
+    ...West.items.filter(
+      (item) =>
+        item.name == TShirt.name ||
+        item.name == Pants.name ||
+        item.name == Sneakers.name ||
+        item.name == Machete.name ||
+        item.name == StanleyCrowbar.name ||
+        item.itemType == ItemType.Medical
+    ),
+  ],
+  effects: [AmbushRisk("low"), RestPoint("low")],
+} as Area;
+// *************************** West Areas ***************************
 
 // *************************** Area ***************************
