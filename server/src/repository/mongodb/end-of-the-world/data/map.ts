@@ -49,6 +49,7 @@ import {
 
 type Effect = "very-low" | "low" | "medium" | "high" | "very-high";
 
+//TODO: Bölgelerin eventleri olabilir. Örn. çölde kum fırtınası.
 // *************************** Region ***************************
 export enum Regions {
   North = "Kuzey",
@@ -231,7 +232,8 @@ enum AreaEffects {
   AmbushRisk = "AmbushRisk",
   TrapHazard = "TrapHazard",
   ThinIceDanger = "ThinIceDanger",
-  BanditThreat = "BanditThreat",
+  RestPoint = "RestPoint",
+  ScorpionEncounter = "ScorpionEncounter",
 }
 
 type AreaEffect = {
@@ -264,10 +266,18 @@ const ThinIceDanger = (effect: Effect): AreaEffect => {
   } as AreaEffect;
 };
 
-const BanditThreat = (effect: Effect): AreaEffect => {
+const RestPoint = (effect: Effect): AreaEffect => {
   return {
-    areaEffect: AreaEffects.BanditThreat,
-    description: "BanditThreat",
+    areaEffect: AreaEffects.RestPoint,
+    description: "Enerji yenileme (dinlenme mekânı gibi).",
+    effect: effect,
+  } as AreaEffect;
+};
+
+const ScorpionEncounter = (effect: Effect): AreaEffect => {
+  return {
+    areaEffect: AreaEffects.ScorpionEncounter,
+    description: "Çöl böcekleri/akrepler saldırabilir.",
     effect: effect,
   } as AreaEffect;
 };
@@ -341,9 +351,58 @@ export const AbandonedVillageArea: Area = {
         item.name == Pants.name
     ),
   ],
-  effects: [BanditThreat("high")],
+  effects: [AmbushRisk("high")],
 } as Area;
 
 // *************************** North Areas ***************************
+
+// *************************** South Areas ***************************
+export const Oasis: Area = {
+  region: South,
+  name: "Vaha",
+  description: "Kızgın çölün ortasında hayat veren küçük bir su kaynağı. Belki de yiyecek bulunabilir",
+  items: [
+    ...South.items.filter(
+      (item) =>
+        item.itemType == ItemType.Container ||
+        item.name == Water.name ||
+        item.name == Bandage.name ||
+        item.name == Meat.name ||
+        item.name == StanleyCrowbar.name ||
+        item.name == Remington870.name ||
+        item.name == Machete.name
+    ),
+  ],
+  effects: [RestPoint("high"), AmbushRisk("low"), ScorpionEncounter("low")],
+} as Area;
+
+export const AbandonedCaravan: Area = {
+  region: South,
+  name: "Terk Edilmiş Kervan",
+  description: "Çölde yarı gömülmüş kervan arabaları ve çuvallar. Güneşte kurumuş kalıntılar arasında hâlâ işe yarar bir şeyler bulunabilir",
+  items: [
+    ...South.items.filter(
+      (item) =>
+        item.itemType == ItemType.Valuable ||
+        item.itemType == ItemType.Food ||
+        item.itemType == ItemType.Bullet ||
+        item.name == Colt1911.name ||
+        item.name == Machete.name ||
+        item.name == PistolBullet.name ||
+        item.name == StanleyCrowbar.name
+    ),
+  ],
+  effects: [AmbushRisk("medium"), ScorpionEncounter("medium")],
+} as Area;
+
+export const BuriedRuins: Area = {
+  region: South,
+  name: "Gömülü Harabe",
+  description: "Kumların altında yavaş yavaş ortaya çıkan eski yapı kalıntıları. Derinlerde saklı değerli eşyalar olabilir.",
+  items: [...South.items.filter((item) => item.itemType == ItemType.Valuable)],
+  effects: [AmbushRisk("medium"), ScorpionEncounter("medium")],
+} as Area;
+
+// *************************** South Areas ***************************
 
 // *************************** Area ***************************
