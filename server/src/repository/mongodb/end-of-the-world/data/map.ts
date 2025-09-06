@@ -459,6 +459,7 @@ export const AbandonedMall: Area = {
 } as Area;
 // *************************** West Areas ***************************
 
+// TODO: Doğu(East region) bölgesi çok büyük tehlikeler barındıracak. Ama oyunun mekaniklerinin oturması gerekiyor. O yüzden şimdilik bu bölge kapalı olacak
 // *************************** East Areas ***************************
 // *************************** East Areas ***************************
 
