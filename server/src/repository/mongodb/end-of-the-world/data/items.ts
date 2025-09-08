@@ -21,7 +21,7 @@ export enum ItemType {
 // ---------------------- ItemType ---------------------- //
 
 // ---------------------- Food Effects ---------------------- //
-export enum FoodEffects {
+enum FoodEffects {
   IncreaseThirst = "IncreaseThirst",
   ReduceThirst = "ReduceThirst",
   IncreaseHunger = "IncreaseHunger",
@@ -169,7 +169,7 @@ const protectionToString = (effect: Effect): string => {
   }
 };
 
-export const DamageProtection = (effect: Effect): ClothesEffect => {
+const DamageProtection = (effect: Effect): ClothesEffect => {
   return {
     clothesEffect: ClothesEffects.DamageProtection,
     description: `Hasarlardan ${protectionToString(effect)} koruma sağlar.`,
@@ -177,7 +177,7 @@ export const DamageProtection = (effect: Effect): ClothesEffect => {
   } as ClothesEffect;
 };
 
-export const ColdProtection = (effect: Effect): ClothesEffect => {
+const ColdProtection = (effect: Effect): ClothesEffect => {
   return {
     clothesEffect: ClothesEffects.ColdProtection,
     description: `Soğuktan ${protectionToString(effect)} koruma sağlar.`,
@@ -185,7 +185,7 @@ export const ColdProtection = (effect: Effect): ClothesEffect => {
   } as ClothesEffect;
 };
 
-export const HotProtection = (effect: Effect): ClothesEffect => {
+const HotProtection = (effect: Effect): ClothesEffect => {
   return {
     clothesEffect: ClothesEffects.HotProtection,
     description: `Sıcaktan ${protectionToString(effect)} koruma sağlar.`,
@@ -283,13 +283,13 @@ enum MedicalEffects {
   CureInfection = "CureInfection",
 }
 
-export type MedicalEffect = {
+type MedicalEffect = {
   medicalEffect: MedicalEffects;
   description: string;
   effect: Effect;
 };
 
-export const Heal = (effect: Effect): MedicalEffect => {
+const Heal = (effect: Effect): MedicalEffect => {
   return {
     medicalEffect: MedicalEffects.Heal,
     description: "Can Yenileme",
@@ -297,7 +297,7 @@ export const Heal = (effect: Effect): MedicalEffect => {
   } as MedicalEffect;
 };
 
-export const PainRelief = (effect: Effect): MedicalEffect => {
+const PainRelief = (effect: Effect): MedicalEffect => {
   return {
     medicalEffect: MedicalEffects.PainRelief,
     description: "Ağrı Kesici",
@@ -305,7 +305,7 @@ export const PainRelief = (effect: Effect): MedicalEffect => {
   } as MedicalEffect;
 };
 
-export const CureInfection = (effect: Effect): MedicalEffect => {
+const CureInfection = (effect: Effect): MedicalEffect => {
   return {
     medicalEffect: MedicalEffects.CureInfection,
     description: "Enfoksiyona iyi gelir.",
