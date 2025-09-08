@@ -225,6 +225,8 @@ export const East: Region = {
   effects: [Hot("medium"), HuntingOpportunity("medium"), WildAnimalThreat("high")],
 } as Region;
 
+export const allRegions: Array<Region> = [North, South, West, East];
+
 // *************************** Region ***************************
 
 // *************************** Area ***************************
@@ -363,6 +365,8 @@ export const AbandonedVillageArea: Area = {
   effects: [AmbushRisk("high")],
 } as Area;
 
+export const allNorthArea: Array<Area> = [MilitaryBase, FrozenLakeArea, AbandonedVillageArea];
+
 // *************************** North Areas ***************************
 
 // *************************** South Areas ***************************
@@ -412,6 +416,8 @@ export const BuriedRuins: Area = {
   effects: [AmbushRisk("medium"), ScorpionEncounter("medium")],
 } as Area;
 
+export const allSouthArea: Array<Area> = [Oasis, AbandonedCaravan, BuriedRuins];
+
 // *************************** South Areas ***************************
 
 // *************************** West Areas ***************************
@@ -457,6 +463,8 @@ export const AbandonedMall: Area = {
   items: [...West.items.filter((item) => item.itemType == ItemType.Food || item.itemType == ItemType.Clothes || item.itemType == ItemType.Valuable)],
   effects: [AmbushRisk("low")],
 } as Area;
+
+export const allWestArea: Array<Area> = [AbandonedFactory, RuinedVillage, AbandonedMall];
 // *************************** West Areas ***************************
 
 // TODO: Doğu(East region) bölgesi çok büyük tehlikeler barındıracak. Ama oyunun mekaniklerinin oturması gerekiyor. O yüzden şimdilik bu bölge kapalı olacak
