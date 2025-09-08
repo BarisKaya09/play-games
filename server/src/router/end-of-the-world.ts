@@ -5,6 +5,7 @@ import {
   buyItemInMarket,
   deleteItemInMarket,
   getDailyMarket,
+  getMap,
   getMarket,
   getUserInventory,
   sellItemInMarket,
@@ -21,5 +22,6 @@ router.post("/sellItemInMarket", requireAuth, sellItemInMarket);
 router.get("/getMarket", requireAuth, getMarket);
 router.post("/deleteItemInMarket", requireAuth, deleteItemInMarket);
 router.post("/stacKTheItemInInventory", requireAuth, stacKTheItemInInventory);
+router.get("/getMap", requireAuth, getMap);
 
 export default router;

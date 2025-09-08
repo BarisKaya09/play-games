@@ -29,6 +29,7 @@ import { DailyMarketRepository } from "../repository/mongodb/end-of-the-world/da
 import { v4 as uuidV4 } from "uuid";
 import { MarketRepository } from "../repository/mongodb/end-of-the-world/market";
 import { ItemType } from "../repository/mongodb/end-of-the-world/data/items";
+import { allNorthArea, allSouthArea, allWestArea, type Area } from "../repository/mongodb/end-of-the-world/data/map";
 
 export const getUserInventory = async (req: express.Request, res: express.Response) => {
   try {
@@ -487,6 +488,25 @@ export const stacKTheItemInInventory = async (req: express.Request, res: express
     await inventoryRepo.close();
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Öğeler istiflendi!" } as SuccessResponse);
+  } catch (err: any) {
+    res.status(ANY_ERROR.status).json(ANY_ERROR);
+  }
+};
+
+type GetMapResponseBody = {
+  region: "north" | "south" | "west" | "east";
+  areas: Array<Area>;
+};
+export const getMap = (req: express.Request, res: express.Response) => {
+  try {
+    const map: Array<GetMapResponseBody> = [
+      { region: "north", areas: allNorthArea } as GetMapResponseBody,
+      { region: "south", areas: allSouthArea } as GetMapResponseBody,
+      { region: "west", areas: allWestArea } as GetMapResponseBody,
+      //TODO: East bölgesi de eklenecek
+    ];
+
+    res.status(StatusCode.OK).json({ status: StatusCode.OK, data: map } as SuccessResponse);
   } catch (err: any) {
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }
