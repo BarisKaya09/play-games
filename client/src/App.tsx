@@ -15,7 +15,7 @@ const App: React.FC<AppProps> = ({ children }) => {
       </div>
 
       <div className="w-[85%] h-full mt-12">
-        <TopBar />
+        {/* <TopBar /> */}
         {children}
       </div>
     </div>
