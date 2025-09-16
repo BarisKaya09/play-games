@@ -7,6 +7,7 @@ export type InventoryItem = {
   itemID: string;
   item: Item;
   value: number;
+  img: string;
 };
 
 export type Inventory = {

@@ -8,6 +8,9 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
+  "scripts": {
+    "dev": "bun --watch ./src/main.ts"
+  },
   "dependencies": {
     "@types/axios": "^0.14.4",
     "@types/bcrypt": "^5.0.2",
