@@ -1,42 +1,71 @@
 import { useEffect, useRef, useState } from "react";
-import type { InventoryItem } from "../../../services/EndOfTheWorldService";
 import EndOfTheWorldService from "../../../services/EndOfTheWorldService";
 import { LoadIcon } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type RarityColor } from "./types";
-import LoadAnimate from "../../LoadAnimate";
-import { InventorySystem } from "./lib/inventory-system";
+import { InventorySystem, type InvGrid } from "./lib/inventory-system";
+import { toast, ToastContainer } from "react-toastify";
+import smallContainer from "../../../assets/small-container.png";
 
 type InventoryGridProps = {
-  item?: InventoryItem;
-  itemIndex: number;
+  item: InvGrid;
+  inventorySystem: InventorySystem;
+  setInvGrids: React.Dispatch<React.SetStateAction<Array<InvGrid>>>;
 };
-const InventoryGrid: React.FC<InventoryGridProps> = ({ item, itemIndex }) => {
+const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, setInvGrids }) => {
   const rareColor: RarityColor =
-    item?.item.rarity == Rarity.Common
+    item.inventoryItem?.item.rarity == Rarity.Common
       ? CommonColor
-      : item?.item.rarity == Rarity.Uncommon
+      : item.inventoryItem?.item.rarity == Rarity.Uncommon
       ? UncommonColor
-      : item?.item.rarity == Rarity.Rare
+      : item.inventoryItem?.item.rarity == Rarity.Rare
       ? RareColor
-      : item?.item.rarity == Rarity.Epic
+      : item.inventoryItem?.item.rarity == Rarity.Epic
       ? EpicColor
-      : item?.item.rarity == Rarity.Legendary
+      : item.inventoryItem?.item.rarity == Rarity.Legendary
       ? LegendaryColor
       : CommonColor;
 
+  const dragItem = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("item", JSON.stringify(item));
+  };
+
+  const dropItem = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.effectAllowed = "move";
+    e.preventDefault();
+
+    const raw = e.dataTransfer.getData("item");
+    if (!raw) return;
+
+    const data = JSON.parse(raw) as InvGrid;
+    inventorySystem.chnageItemPlace(data, item);
+    setInvGrids([...inventorySystem.getInvGrids()]);
+  };
+
+  const allowDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.effectAllowed = "move";
+    e.preventDefault();
+  };
+
   return (
-    <LoadAnimate atype="expansion" duration={itemIndex * 10 * 5}>
-      <div
-        className={`relative w-[100px] h-[100px] bg-zinc-900 border-2 border-zinc-700 ${rareColor} rounded-lg text-sm text-center flex flex-col justify-center select-none`}
-      >
-        <span>{item?.item.name}</span>
+    <div
+      className={`relative w-[140px] h-[120px] bg-zinc-900 border-2 border-zinc-700 ${rareColor} rounded-lg text-sm select-none z-10 border-dashed hover:border-5 duration-100`}
+      draggable={!item.empty && true}
+      onDragStart={dragItem}
+      onDrop={dropItem}
+      onDragOver={allowDrop}
+    >
+      <div className="w-full h-full text-center flex flex-col justify-center">
+        <span>{item.inventoryItem?.item.name}</span>
+        {!item.empty && <img src={smallContainer} className="w-[160px] h-[110px] select-none m-auto -z-10" />}
       </div>
-    </LoadAnimate>
+    </div>
   );
 };
 
 const InventoryC: React.FC = () => {
   const inventorySystemRef = useRef(new InventorySystem());
+  const [invGrids, setInvGrids] = useState<Array<InvGrid>>(inventorySystemRef.current.getInvGrids());
 
   const [isLoadedInventory, setIsLoadedInventory] = useState<boolean>(false);
 
@@ -53,13 +82,14 @@ const InventoryC: React.FC = () => {
 
         setIsLoadedInventory(true);
       } else {
+        toast.error(data.error.message);
         throw data;
       }
     })();
   }, []);
 
   return (
-    <div className="relative w-full h-full p-5 grid grid-cols-10">
+    <div className="relative w-full h-full p-10 grid grid-cols-10 gap-7 overflow-y-auto">
       {!isLoadedInventory && (
         <div className="absolute w-full h-full flex flex-col justify-center">
           <LoadIcon />
@@ -67,11 +97,13 @@ const InventoryC: React.FC = () => {
       )}
 
       {isLoadedInventory &&
-        inventorySystemRef.current.getInvGrids().map((item, index) => (
+        invGrids.map((item) => (
           <div className="w-[100px] h-[100px]">
-            <InventoryGrid item={item.inventoryItem} itemIndex={index} />
+            <InventoryGrid key={item.index} item={item} inventorySystem={inventorySystemRef.current} setInvGrids={setInvGrids} />
           </div>
         ))}
+
+      <ToastContainer />
     </div>
   );
 };

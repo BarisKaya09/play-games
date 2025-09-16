@@ -56,6 +56,30 @@ export class InventorySystem {
     this.invGrids[index].empty = false;
   }
 
+  public chnageItemPlace(currentPlace: InvGrid, targetPlace: InvGrid) {
+    if (currentPlace.empty) return;
+
+    let cp = this.getInvGrid(currentPlace.index);
+    let tp = this.getInvGrid(targetPlace.index);
+
+    if (targetPlace.empty) {
+      tp.inventoryItem = cp.inventoryItem;
+      tp.empty = false;
+
+      cp.inventoryItem = undefined;
+      cp.empty = true;
+    } else {
+      const cpCopy = { ...cp };
+      const tpCopy = { ...tp };
+
+      cp.empty = tpCopy.empty;
+      cp.inventoryItem = tpCopy.inventoryItem;
+
+      tp.empty = cpCopy.empty;
+      tp.inventoryItem = cpCopy.inventoryItem;
+    }
+  }
+
   public getAllItems(): Array<InventoryItem> {
     return this.invGrids.filter((grid) => !grid.empty).map((grid) => grid.inventoryItem || ({} as InventoryItem));
   }

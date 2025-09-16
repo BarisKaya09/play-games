@@ -8,16 +8,16 @@ export enum Rarity {
 }
 
 export type RarityColor =
-  | "shadow-md shadow-zinc-700"
-  | "shadow-md shadow-slate-700"
-  | "shadow-md shadow-violet-700"
-  | "shadow-md shadow-fuchsia-700"
-  | "shadow-md shadow-pink-700";
-export const CommonColor: RarityColor = "shadow-md shadow-zinc-700";
-export const UncommonColor: RarityColor = "shadow-md shadow-slate-700";
-export const RareColor: RarityColor = "shadow-md shadow-violet-700";
-export const EpicColor: RarityColor = "shadow-md shadow-fuchsia-700";
-export const LegendaryColor: RarityColor = "shadow-md shadow-pink-700";
+  | "border-b-5 border-b-zinc-700"
+  | "border-b-5 border-b-slate-700"
+  | "border-b-5 border-b-fuchsia-700"
+  | "border-b-5 border-b-violet-700"
+  | "border-b-5 border-b-pink-700";
+export const CommonColor: RarityColor = "border-b-5 border-b-zinc-700";
+export const UncommonColor: RarityColor = "border-b-5 border-b-slate-700";
+export const RareColor: RarityColor = "border-b-5 border-b-fuchsia-700";
+export const EpicColor: RarityColor = "border-b-5 border-b-violet-700";
+export const LegendaryColor: RarityColor = "border-b-5 border-b-pink-700";
 
 // ---------------------- Rarity ---------------------- //
 
@@ -57,6 +57,7 @@ export type Food = {
   name: string; //TODO: Tipi sonra değişecek.
   itemType: ItemType;
   rarity: Rarity;
+  img: string;
 
   stack: number;
   stackSize: number;
@@ -89,6 +90,7 @@ export type Clothes = {
   name: string; //TODO: Tipi sonradan değişecek.
   itemType: ItemType;
   rarity: Rarity;
+  img: string;
 
   stack: number;
   stackSize: number;
@@ -107,6 +109,7 @@ export type Weapon = {
   name: string; // TODO: Tipi sonra değişecek
   itemType: ItemType;
   rarity: Rarity;
+  img: string;
 
   stack: number;
   stackSize: number;
@@ -128,6 +131,7 @@ export type Container = {
   name: string; // Todo: Tipi sonradan değişecek
   itemType: ItemType;
   rarity: Rarity;
+  img: string;
 
   capacity: number; // depo büyüklüğü
   items: Array<Food | Clothes | Weapon | Bullet | Valuable | Medical>;
@@ -141,6 +145,7 @@ export type Bullet = {
   name: string; // TODO: Tipi sonradan değişecek
   itemType: ItemType;
   rarity: Rarity;
+  img: string;
 
   stack: number;
   stackSize: number;
@@ -157,6 +162,7 @@ export type Valuable = {
   name: string;
   itemType: ItemType;
   rarity: Rarity;
+  img: string;
 
   stack: number;
   stackSize: number;
@@ -184,6 +190,7 @@ export type Medical = {
   name: string;
   itemType: ItemType;
   rarity: Rarity;
+  img: string;
 
   stack: number;
   stackSize: number;

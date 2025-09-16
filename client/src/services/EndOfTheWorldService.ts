@@ -1,11 +1,12 @@
 import axios from "axios";
 import { response, type SuccessResponse, type UnsuccessResponse } from "./response";
-import type { Item } from "../components/games/end-of-the-world/types";
+import { type Item } from "../components/games/end-of-the-world/types";
 
 export type InventoryItem = {
   itemID: string;
   item: Item;
   value: number;
+  img: string;
 };
 
 export type Inventory = {
