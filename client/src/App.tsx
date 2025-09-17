@@ -9,7 +9,7 @@ const App: React.FC<AppProps> = ({ children }) => {
   return (
     <div className="w-full h-full flex gap-5">
       <div className="w-[15%] h-full">
-        <div className="fixed top-0 left-0 w-[15%] h-[917px] bg-[#111111]">
+        <div className="fixed top-0 left-0 w-[15%] h-full bg-[#111111]">
           <SideBar />
         </div>
       </div>
