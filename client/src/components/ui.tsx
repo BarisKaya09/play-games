@@ -1,7 +1,79 @@
+import SmallContainerPng from "../assets/small-container.png";
+import Machete from "../assets/machete.png";
+import Sweater from "../assets/sweater.png";
+import Shorts from "../assets/shorts.png";
+import SurvivalBiscuits from "../assets/survival-biscuits.png";
+
+export const getItemImg = (itemName: string): string => {
+  switch (itemName) {
+    case ItemNames.CannedBeans:
+    case ItemNames.SurvivalBiscuits:
+      return SurvivalBiscuits;
+    case ItemNames.AncientChocolateBar:
+    case ItemNames.Somon:
+    case ItemNames.Water:
+    case ItemNames.Meat:
+    case ItemNames.RottenMeat:
+    case ItemNames.SmallTrout:
+    case ItemNames.Perch:
+    case ItemNames.ArcticChar:
+    case ItemNames.NorthernPike:
+    case ItemNames.Whitefish:
+    case ItemNames.IceSalmon:
+    case ItemNames.CrystalCarp:
+    case ItemNames.AncientIcefish:
+    case ItemNames.TShirt:
+    case ItemNames.Shorts:
+      return Shorts;
+    case ItemNames.Sweater:
+      return Sweater;
+    case ItemNames.Jacket:
+    case ItemNames.MilitaryJacket:
+    case ItemNames.Pants:
+    case ItemNames.CargoPants:
+    case ItemNames.Sneakers:
+    case ItemNames.MilitaryBoots:
+    case ItemNames.MotorcycleHelmet:
+    case ItemNames.LightMilitaryHelmet:
+    case ItemNames.HeavyMilitaryHelmet:
+    case ItemNames.Glock18:
+    case ItemNames.Colt1911:
+    case ItemNames.AK47:
+    case ItemNames.M4A1:
+    case ItemNames.Remington870:
+    case ItemNames.BarrettM82:
+    case ItemNames.KaBarKnife:
+    case ItemNames.Machete:
+      return Machete;
+    case ItemNames.LouisvilleSlugger:
+    case ItemNames.StanleyCrowbar:
+    case ItemNames.Backpack:
+    case ItemNames.SmallContainer:
+      return SmallContainerPng;
+    case ItemNames.BigContainer:
+    case ItemNames.PistolBullet:
+    case ItemNames.RifleBullet:
+    case ItemNames.SniperBullet:
+    case ItemNames.PumpgunBullet:
+    case ItemNames.GoldRing:
+    case ItemNames.SilverNecklace:
+    case ItemNames.DiamondEarring:
+    case ItemNames.LuxuryWatch:
+    case ItemNames.OldPainting:
+    case ItemNames.Bandage:
+    case ItemNames.Medkit:
+    case ItemNames.Painkiller:
+    case ItemNames.AntibioticPills:
+    default:
+      return "";
+  }
+};
+
 import React, { forwardRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { ItemNames } from "./games/end-of-the-world/types";
 
 type InputProps = {
   type: React.HTMLInputTypeAttribute;

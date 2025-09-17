@@ -10,7 +10,7 @@ export type InvGrid = {
 
 export class InventorySystem {
   private invGrids: Array<InvGrid> = [];
-  private user_id: string = "";
+  private user_id: string = ""; //? gerek olmayabilir
   private money: number = 0;
 
   constructor(cachedInvGrids?: Array<InvGrid>) {

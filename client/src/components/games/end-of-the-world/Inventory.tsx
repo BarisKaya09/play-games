@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import EndOfTheWorldService from "../../../services/EndOfTheWorldService";
-import { LoadIcon } from "../../ui";
+import { getItemImg, LoadIcon } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type RarityColor } from "./types";
 import { InventorySystem, type InvGrid } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
-import smallContainer from "../../../assets/small-container.png";
 
 type InventoryGridProps = {
   item: InvGrid;
@@ -57,7 +56,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
     >
       <div className="w-full h-full text-center flex flex-col justify-center">
         <span>{item.inventoryItem?.item.name}</span>
-        {!item.empty && <img src={smallContainer} className="w-[160px] h-[110px] select-none m-auto -z-10" />}
+        {!item.empty && <img src={getItemImg(item.inventoryItem?.item.name || "")} className="w-[160px] h-[110px] select-none m-auto -z-10" />}
       </div>
     </div>
   );
