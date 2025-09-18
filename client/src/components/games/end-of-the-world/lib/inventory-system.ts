@@ -1,6 +1,6 @@
 import type { InventoryItem } from "../../../../services/EndOfTheWorldService";
 
-const MAX_INVENTORY_GRID = 60;
+const MAX_INVENTORY_GRID = 100;
 
 export type InvGrid = {
   index: number;

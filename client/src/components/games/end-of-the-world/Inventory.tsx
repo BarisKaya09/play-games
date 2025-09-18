@@ -46,6 +46,11 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
     e.preventDefault();
   };
 
+  const getItemStack = (): number => {
+    if (item.inventoryItem?.item && "stackable" in item.inventoryItem?.item) return item.inventoryItem?.item.stack;
+    return 1;
+  };
+
   return (
     <div
       className={`relative w-[140px] h-[120px] bg-zinc-900 border-2 border-zinc-700 ${rareColor} rounded-lg text-sm select-none z-10 border-dashed hover:border-5 duration-100`}
@@ -54,6 +59,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
       onDrop={dropItem}
       onDragOver={allowDrop}
     >
+      {!item.empty && <div className="absolute w-5 h-8 text-slate-400 text-lg font-bold -right-4 -top-3">x{getItemStack()}</div>}
       <div className="w-full h-full text-center flex flex-col justify-center">
         <span>{item.inventoryItem?.item.name}</span>
         {!item.empty && <img src={getItemImg(item.inventoryItem?.item.name || "")} className="w-[160px] h-[110px] select-none m-auto -z-10" />}

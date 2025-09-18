@@ -3,26 +3,55 @@ import Machete from "../assets/machete.png";
 import Sweater from "../assets/sweater.png";
 import Shorts from "../assets/shorts.png";
 import SurvivalBiscuits from "../assets/survival-biscuits.png";
+import CannedBeans from "../assets/canned-beans.png";
+import AncientChocolateBar from "../assets/ancient-chocolate-bar.png";
+import Somon from "../assets/somon.png";
+import Water from "../assets/water.png";
+import Meat from "../assets/meat.png";
+import RottenMeat from "../assets/rotten-meat.png";
+import SmallTrout from "../assets/small-trout.png";
+import Perch from "../assets/perch.png";
+import ArcticChar from "../assets/arctic-char.png";
+import NorthernPike from "../assets/northern-pike.png";
+import IceSalmon from "../assets/ice-salmon.png";
+import CrystalCarp from "../assets/crystal-carp.png";
+import AncientIcefish from "../assets/ancient-ice-fish.png";
+import TShirt from "../assets/tShirt.png";
 
 export const getItemImg = (itemName: string): string => {
   switch (itemName) {
     case ItemNames.CannedBeans:
+      return CannedBeans;
     case ItemNames.SurvivalBiscuits:
       return SurvivalBiscuits;
     case ItemNames.AncientChocolateBar:
+      return AncientChocolateBar;
     case ItemNames.Somon:
+      return Somon;
     case ItemNames.Water:
+      return Water;
     case ItemNames.Meat:
+      return Meat;
     case ItemNames.RottenMeat:
+      return RottenMeat;
+
     case ItemNames.SmallTrout:
+      return SmallTrout;
     case ItemNames.Perch:
+      return Perch;
     case ItemNames.ArcticChar:
+      return ArcticChar;
     case ItemNames.NorthernPike:
+      return NorthernPike;
     case ItemNames.Whitefish:
     case ItemNames.IceSalmon:
+      return IceSalmon;
     case ItemNames.CrystalCarp:
+      return CrystalCarp;
     case ItemNames.AncientIcefish:
+      return AncientIcefish;
     case ItemNames.TShirt:
+      return TShirt;
     case ItemNames.Shorts:
       return Shorts;
     case ItemNames.Sweater:
