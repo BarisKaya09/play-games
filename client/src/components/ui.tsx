@@ -34,7 +34,6 @@ export const getItemImg = (itemName: string): string => {
       return Meat;
     case ItemNames.RottenMeat:
       return RottenMeat;
-
     case ItemNames.SmallTrout:
       return SmallTrout;
     case ItemNames.Perch:

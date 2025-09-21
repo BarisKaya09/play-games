@@ -45,7 +45,7 @@ enum FoodEffects {
   CureIllness = "CureIllness",
 }
 
-type Effect = "very-low" | "low" | "medium" | "high" | "very-high";
+export type Effect = "very-low" | "low" | "medium" | "high" | "very-high";
 export type FoodEffect = {
   foodEffect: FoodEffects;
   description: string;
@@ -67,7 +67,7 @@ export type Food = {
   decayTime: number; // bozulma süresi
   decayLevel: "fresh" | "stale" | "rotten"; // taze | bayat | çürümüş
 
-  foodEffects: Array<FoodEffect>;
+  effects: Array<FoodEffect>;
 
   getValue: () => number;
 };
