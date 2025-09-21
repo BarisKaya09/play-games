@@ -6,6 +6,7 @@ import cron from "node-cron";
 
 import router from "./router/router.ts";
 import { DailyMarketRepository } from "./repository/mongodb/end-of-the-world/daily-market.ts";
+import chalk from "chalk";
 
 const main = async () => {
   dotenv.config({ path: ".env" });
@@ -27,7 +28,7 @@ const main = async () => {
   app.use("/api", router);
 
   app.listen(port, () => {
-    console.log(`Sunucu ${port} portunda başarılı bir şekilde başlatıldı!`);
+    console.log(chalk.bgRedBright(chalk.green(`Sunucu ${port} portunda başarılı bir şekilde başlatıldı!`)));
   });
 
   //? her gün saat 12:00 da "daily-market" güncellenecek.
@@ -38,11 +39,11 @@ const main = async () => {
 
       if (dailyMarket) {
         await dailyMarketRepo.deleteDailyMarket({ id: dailyMarket.id });
-        console.info(`[ ${new Date().toString()} ] Bir önceki günlük market silindi!`);
+        console.info(chalk.bgCyan(`[ ${new Date().toString()} ] Bir önceki günlük market silindi!`));
       }
 
       await dailyMarketRepo.insertDailyMarket();
-      console.info(`[ ${new Date().toString()} ] Günlük market yenilendi!`);
+      console.info(chalk.bgCyan(`[ ${new Date().toString()} ] Günlük market yenilendi!`));
 
       await dailyMarketRepo.close();
     } catch (err: any) {

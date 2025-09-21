@@ -136,7 +136,7 @@ export type Food = {
   decayTime: number; // bozulma süresi
   decayLevel: "fresh" | "stale" | "rotten"; // taze | bayat | çürümüş
 
-  foodEffects: Array<FoodEffect>;
+  effects: Array<FoodEffect>;
 
   getValue: () => number;
 };
@@ -358,7 +358,7 @@ export const CannedBeans: Food = {
   decayTime: hour * 24 * 2, // 2 gün
   decayLevel: "fresh",
 
-  foodEffects: [ReduceHunger("low"), IncreaseThirst("low"), IncreaseEnergy("low")],
+  effects: [ReduceHunger("low"), IncreaseThirst("low"), IncreaseEnergy("low")],
 
   getValue: (): number => getItemValue(Rarity.Common),
 } as Food;
@@ -377,7 +377,7 @@ export const SurvivalBiscuits: Food = {
   decayTime: hour * 24,
   decayLevel: "fresh",
 
-  foodEffects: [ReduceHunger("low"), IncreaseThirst("low")],
+  effects: [ReduceHunger("low"), IncreaseThirst("low")],
 
   getValue: (): number => getItemValue(Rarity.Common),
 } as Food;
@@ -396,7 +396,7 @@ export const AncientChocolateBar: Food = {
   decayTime: hour * 24 * 5, // 5 gün
   decayLevel: "fresh",
 
-  foodEffects: [IncreaseThirst("low"), ReduceHunger("medium"), IncreaseEnergy("medium")],
+  effects: [IncreaseThirst("low"), ReduceHunger("medium"), IncreaseEnergy("medium")],
 
   getValue: (): number => getItemValue(Rarity.Rare),
 } as Food;
@@ -415,7 +415,7 @@ export const Somon: Food = {
   decayTime: hour * 24,
   decayLevel: "fresh",
 
-  foodEffects: [ReduceHunger("high"), IncreaseEnergy("low")],
+  effects: [ReduceHunger("high"), IncreaseEnergy("low")],
 
   getValue: (): number => getItemValue(Rarity.Epic),
 } as Food;
@@ -434,7 +434,7 @@ export const Water: Food = {
   decayTime: hour * 24 * 30,
   decayLevel: "fresh",
 
-  foodEffects: [ReduceThirst("high"), IncreaseEnergy("low")],
+  effects: [ReduceThirst("high"), IncreaseEnergy("low")],
 
   getValue: (): number => getItemValue(Rarity.Uncommon),
 } as Food;
@@ -453,7 +453,7 @@ export const Meat: Food = {
   decayTime: hour * 24 * 2,
   decayLevel: "fresh",
 
-  foodEffects: [IncreaseThirst("low"), ReduceHunger("high")],
+  effects: [IncreaseThirst("low"), ReduceHunger("high")],
 
   getValue: (): number => getItemValue(Rarity.Rare),
 } as Food;
@@ -472,7 +472,7 @@ export const RottenMeat: Food = {
   decayTime: 0,
   decayLevel: "rotten",
 
-  foodEffects: [IncreaseThirst("medium"), IncreaseHunger("very-high"), ReduceEnergy("high"), CauseIllness("very-high")],
+  effects: [IncreaseThirst("medium"), IncreaseHunger("very-high"), ReduceEnergy("high"), CauseIllness("very-high")],
 
   getValue: (): number => getItemValue(Rarity.Common),
 } as Food;
@@ -490,7 +490,7 @@ export const SmallTrout: Food = {
   hungerRestoration: "low",
   decayLevel: "fresh",
 
-  foodEffects: [IncreaseThirst("low"), ReduceHunger("medium"), IncreaseEnergy("medium")],
+  effects: [IncreaseThirst("low"), ReduceHunger("medium"), IncreaseEnergy("medium")],
 
   getValue: (): number => getItemValue(Rarity.Common),
 } as Food;
@@ -508,7 +508,7 @@ export const Perch: Food = {
   hungerRestoration: "low",
   decayLevel: "fresh",
 
-  foodEffects: [IncreaseThirst("low"), ReduceHunger("medium"), IncreaseEnergy("medium")],
+  effects: [IncreaseThirst("low"), ReduceHunger("medium"), IncreaseEnergy("medium")],
 
   getValue: (): number => getItemValue(Rarity.Common),
 } as Food;
@@ -526,7 +526,7 @@ export const ArcticChar: Food = {
   hungerRestoration: "medium",
   decayLevel: "fresh",
 
-  foodEffects: [IncreaseThirst("very-low"), ReduceHunger("high"), IncreaseEnergy("medium")],
+  effects: [IncreaseThirst("very-low"), ReduceHunger("high"), IncreaseEnergy("medium")],
 
   getValue: (): number => getItemValue(Rarity.Uncommon),
 } as Food;
@@ -544,7 +544,7 @@ export const NorthernPike: Food = {
   hungerRestoration: "medium",
   decayLevel: "fresh",
 
-  foodEffects: [IncreaseThirst("very-low"), ReduceHunger("high"), IncreaseEnergy("medium")],
+  effects: [IncreaseThirst("very-low"), ReduceHunger("high"), IncreaseEnergy("medium")],
 
   getValue: (): number => getItemValue(Rarity.Uncommon),
 } as Food;
@@ -562,7 +562,7 @@ export const Whitefish: Food = {
   hungerRestoration: "medium",
   decayLevel: "fresh",
 
-  foodEffects: [IncreaseThirst("very-low"), ReduceHunger("high"), IncreaseEnergy("medium")],
+  effects: [IncreaseThirst("very-low"), ReduceHunger("high"), IncreaseEnergy("medium")],
 
   getValue: (): number => getItemValue(Rarity.Uncommon),
 } as Food;
@@ -580,7 +580,7 @@ export const IceSalmon: Food = {
   hungerRestoration: "high",
   decayLevel: "fresh",
 
-  foodEffects: [ReduceHunger("high"), IncreaseEnergy("high")],
+  effects: [ReduceHunger("high"), IncreaseEnergy("high")],
 
   getValue: (): number => getItemValue(Rarity.Rare),
 } as Food;
@@ -598,7 +598,7 @@ export const CrystalCarp: Food = {
   hungerRestoration: "high",
   decayLevel: "fresh",
 
-  foodEffects: [ReduceHunger("high"), IncreaseEnergy("high")],
+  effects: [ReduceHunger("high"), IncreaseEnergy("high")],
 
   getValue: (): number => getItemValue(Rarity.Rare),
 } as Food;
@@ -616,7 +616,7 @@ export const AncientIcefish: Food = {
   hungerRestoration: "very-high",
   decayLevel: "fresh",
 
-  foodEffects: [ReduceThirst("very-high"), ReduceHunger("very-high"), IncreaseEnergy("very-high")],
+  effects: [ReduceThirst("very-high"), ReduceHunger("very-high"), IncreaseEnergy("very-high")],
 
   getValue: (): number => getItemValue(Rarity.Rare),
 } as Food;
