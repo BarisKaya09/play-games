@@ -11,7 +11,7 @@ const LoadAnimate: React.FC<LoadAnimateProps> = ({ children, atype, duration }) 
 
   useEffect(() => {
     if (elRef.current) loadWithAnim(elRef.current, atype, duration);
-  });
+  }, []);
 
   return (
     <div className="opacity-0" ref={elRef}>

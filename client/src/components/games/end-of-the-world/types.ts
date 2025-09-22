@@ -8,16 +8,21 @@ export enum Rarity {
 }
 
 export type RarityColor =
-  | "border-b-5 border-b-zinc-700"
-  | "border-b-5 border-b-slate-700"
-  | "border-b-5 border-b-fuchsia-700"
-  | "border-b-5 border-b-violet-700"
-  | "border-b-5 border-b-pink-700";
-export const CommonColor: RarityColor = "border-b-5 border-b-zinc-700";
-export const UncommonColor: RarityColor = "border-b-5 border-b-slate-700";
-export const RareColor: RarityColor = "border-b-5 border-b-fuchsia-700";
-export const EpicColor: RarityColor = "border-b-5 border-b-violet-700";
-export const LegendaryColor: RarityColor = "border-b-5 border-b-pink-700";
+  | "border-b-5 border-b-zinc-700 shadow-md shadow-zinc-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-zinc-500/50"
+  | "border-b-5 border-b-slate-700 shadow-md shadow-slate-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-slate-500/50"
+  | "border-b-5 border-b-fuchsia-700 shadow-md shadow-fuchsia-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-fuchsia-500/50"
+  | "border-b-5 border-b-violet-700 shadow-md shadow-violet-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-violet-500/50"
+  | "border-b-5 border-b-pink-700 shadow-md shadow-pink-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-pink-500/50";
+export const CommonColor: RarityColor =
+  "border-b-5 border-b-zinc-700 shadow-md shadow-zinc-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-zinc-500/50";
+export const UncommonColor: RarityColor =
+  "border-b-5 border-b-slate-700 shadow-md shadow-slate-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-slate-500/50";
+export const RareColor: RarityColor =
+  "border-b-5 border-b-fuchsia-700 shadow-md shadow-fuchsia-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-fuchsia-500/50";
+export const EpicColor: RarityColor =
+  "border-b-5 border-b-violet-700 shadow-md shadow-violet-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-violet-500/50";
+export const LegendaryColor: RarityColor =
+  "border-b-5 border-b-pink-700 shadow-md shadow-pink-500/50 hover:shadow-2xl inset-shadow-sm inset-shadow-pink-500/50";
 
 // ---------------------- Rarity ---------------------- //
 

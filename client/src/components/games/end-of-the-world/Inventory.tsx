@@ -62,7 +62,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
       )}
 
       <div
-        className={`relative w-[140px] h-[120px] bg-zinc-900 border-2 border-zinc-700 ${rareColor} rounded-lg text-sm select-none z-10 border-dashed hover:border-5 duration-100`}
+        className={`relative w-[140px] h-[120px] bg-zinc-900 border-3 border-zinc-700 ${rareColor} border-none rounded-lg text-sm select-none z-10 hover:border-5 duration-100`}
         draggable={!item.empty && true}
         onDragStart={dragItem}
         onDrop={dropItem}
@@ -139,16 +139,16 @@ const ItemEffectsFC: React.FC<ItemEffectsProps> = ({ item }) => {
   };
 
   return (
-    <ul className="absolute left-48 w-full min-h-[50px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-non">
+    <ul className="absolute left-48 w-full min-h-[50px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-none">
       {"effects" in item ? (
         item.effects.map((effect) => (
-          <li className="w-full min-h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center mb-2">
+          <li className="w-full min-h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center my-1 rounded-lg">
             <div>{effect.description}</div>
             <div className="text-rose-300">{getEffectLevel(effect.effect)}</div>
           </li>
         ))
       ) : (
-        <li className="w-full min-h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center mb-2">
+        <li className="w-full min-h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center my-1 rounded-lg">
           İtemin Efekti yok
         </li>
       )}
