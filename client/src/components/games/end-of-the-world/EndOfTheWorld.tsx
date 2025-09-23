@@ -5,6 +5,7 @@ import Market from "./Market";
 import DailyMarket from "./DailyMarket";
 import InventoryC from "./Inventory";
 import Settings from "./Settings";
+import EndOfTheWorldBanner from "../../../assets/end-of-the-world.png";
 
 type MenuProps = {
   activeScreen: ActiveScreen;
@@ -32,13 +33,15 @@ const Menu: React.FC<MenuProps> = ({ setActiveScreen }) => {
   );
 };
 
-type ActiveScreen = "menu" | "play" | "market" | "daily-market" | "inventory" | "settings";
+export type ActiveScreen = "menu" | "play" | "market" | "daily-market" | "inventory" | "settings";
 
 const EndOfTheWorld: React.FC = () => {
   const [activeScreen, setActiveScreen] = useState<ActiveScreen>("menu");
 
   return (
-    <div className="w-[99%] h-[850px] border-2 border-orange-900 rounded-md bg-zinc-900">
+    <div className={`relative w-[99%] h-[850px] border-2 border-orange-900 rounded-md ${activeScreen != "menu" && "bg-zinc-900"}`}>
+      {activeScreen == "menu" && <img src={EndOfTheWorldBanner} className="absolute left-0 top-0 w-full h-full -z-10 mask-b-from-10%" />}
+
       {activeScreen == "menu" && (
         <div className="h-full flex items-center">
           <Menu activeScreen={activeScreen} setActiveScreen={setActiveScreen} />
@@ -48,7 +51,7 @@ const EndOfTheWorld: React.FC = () => {
       {activeScreen == "play" && <Play />}
       {activeScreen == "market" && <Market />}
       {activeScreen == "daily-market" && <DailyMarket />}
-      {activeScreen == "inventory" && <InventoryC />}
+      {activeScreen == "inventory" && <InventoryC setActiveScreen={setActiveScreen} />}
       {activeScreen == "settings" && <Settings />}
     </div>
   );

@@ -414,13 +414,13 @@ export const deleteItemInMarket = async (req: express.Request, res: express.Resp
   }
 };
 
-type StackTheItemInInventory = {
+type StackTheItemInInventoryBody = {
   subItemID: string;
   itemID: string;
 };
 export const stacKTheItemInInventory = async (req: express.Request, res: express.Response) => {
   try {
-    const { subItemID, itemID } = req.body as StackTheItemInInventory;
+    const { subItemID, itemID } = req.body as StackTheItemInInventoryBody;
     if (!subItemID || !itemID) {
       res.status(MISSING_CONTENT.status).json(MISSING_CONTENT);
       return;
@@ -488,6 +488,21 @@ export const stacKTheItemInInventory = async (req: express.Request, res: express
     await inventoryRepo.close();
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Öğeler istiflendi!" } as SuccessResponse);
+  } catch (err: any) {
+    res.status(ANY_ERROR.status).json(ANY_ERROR);
+  }
+};
+
+type SplitItemStackBody = {
+  item: InventoryItem;
+};
+export const splitItemStack = (req: express.Request, res: express.Response) => {
+  try {
+    const { item } = req.body as SplitItemStackBody;
+    if (!item) {
+      res.status(MISSING_CONTENT.status).json(MISSING_CONTENT);
+      return;
+    }
   } catch (err: any) {
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }

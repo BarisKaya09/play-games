@@ -4,8 +4,9 @@ import { getItemImg, Icon, LoadIcon } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type Effect, type Item, type RarityColor } from "./types";
 import { InventorySystem, type InvGrid } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
-import { faCaretLeft, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import { faCaretLeft, faCircleArrowLeft, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import LoadAnimate from "../../LoadAnimate";
+import type { ActiveScreen } from "./EndOfTheWorld";
 
 type InventoryGridProps = {
   item: InvGrid;
@@ -27,10 +28,12 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
       : CommonColor;
 
   const [isVisibleItemMenu, setIsVisibleItemMenu] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const dragItem = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("item", JSON.stringify(item));
+    setIsDragging(true);
   };
 
   const dropItem = (e: React.DragEvent<HTMLDivElement>) => {
@@ -43,11 +46,13 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
     const data = JSON.parse(raw) as InvGrid;
     inventorySystem.chnageItemPlace(data, item);
     setInvGrids([...inventorySystem.getInvGrids()]);
+    setIsDragging(false);
   };
 
   const allowDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.effectAllowed = "move";
     e.preventDefault();
+    setIsDragging(false);
   };
 
   const getItemStack = (): number => {
@@ -62,7 +67,9 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
       )}
 
       <div
-        className={`relative w-[140px] h-[120px] bg-zinc-900 border-3 border-zinc-700 ${rareColor} border-none rounded-lg text-sm select-none z-10 hover:border-5 duration-100`}
+        className={`relative w-[140px] h-[120px] bg-zinc-900 border-3 border-zinc-700 ${rareColor} border-none rounded-lg text-sm select-none z-10 hover:border-5 duration-100 ${
+          isDragging && "mask-b-from-80%"
+        }`}
         draggable={!item.empty && true}
         onDragStart={dragItem}
         onDrop={dropItem}
@@ -158,7 +165,10 @@ const ItemEffectsFC: React.FC<ItemEffectsProps> = ({ item }) => {
   );
 };
 
-const InventoryC: React.FC = () => {
+type InventoryCProps = {
+  setActiveScreen: React.Dispatch<React.SetStateAction<ActiveScreen>>;
+};
+const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen }) => {
   const inventorySystemRef = useRef(new InventorySystem());
   const [invGrids, setInvGrids] = useState<Array<InvGrid>>(inventorySystemRef.current.getInvGrids());
 
@@ -184,21 +194,32 @@ const InventoryC: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-full p-10 grid grid-cols-10 gap-7 overflow-y-auto">
-      {!isLoadedInventory && (
-        <div className="absolute w-full h-full flex flex-col justify-center">
-          <LoadIcon />
+    <div className="w-full h-full">
+      {isLoadedInventory && (
+        <div className="w-full h-[5%] p-10">
+          <div className="w-[10%] h-full text-lg hover:text-rose-300 select-none cursor-pointer" onClick={() => setActiveScreen("menu")}>
+            <Icon _icon={faCircleArrowLeft} />
+            <span className="ml-2">Menüye Dön</span>
+          </div>
         </div>
       )}
 
-      {isLoadedInventory &&
-        invGrids.map((item) => (
-          <div className="w-[100px] h-[100px]">
-            <InventoryGrid key={item.index} item={item} inventorySystem={inventorySystemRef.current} setInvGrids={setInvGrids} />
+      <div className="relative w-full h-[90%] p-10 grid grid-cols-10 gap-7 overflow-y-auto">
+        {!isLoadedInventory && (
+          <div className="absolute w-full h-full flex flex-col justify-center">
+            <LoadIcon />
           </div>
-        ))}
+        )}
 
-      <ToastContainer />
+        {isLoadedInventory &&
+          invGrids.map((item) => (
+            <div className="w-[100px] h-[100px]">
+              <InventoryGrid key={item.index} item={item} inventorySystem={inventorySystemRef.current} setInvGrids={setInvGrids} />
+            </div>
+          ))}
+
+        <ToastContainer />
+      </div>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import {
   getMarket,
   getUserInventory,
   sellItemInMarket,
+  splitItemStack,
   stacKTheItemInInventory,
 } from "../controllers/end-of-the-world";
 
@@ -22,6 +23,7 @@ router.post("/sellItemInMarket", requireAuth, sellItemInMarket);
 router.get("/getMarket", requireAuth, getMarket);
 router.post("/deleteItemInMarket", requireAuth, deleteItemInMarket);
 router.post("/stacKTheItemInInventory", requireAuth, stacKTheItemInInventory);
+router.post("/splitItemStack", requireAuth, splitItemStack);
 router.get("/getMap", requireAuth, getMap);
 
 export default router;

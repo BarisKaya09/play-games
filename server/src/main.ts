@@ -28,7 +28,7 @@ const main = async () => {
   app.use("/api", router);
 
   app.listen(port, () => {
-    console.log(chalk.bgRedBright(chalk.green(`Sunucu ${port} portunda başarılı bir şekilde başlatıldı!`)));
+    console.log(chalk.bgRedBright(chalk.green(`Sunucu http://localhost:${port} portunda başarılı bir şekilde başlatıldı!`)));
   });
 
   //? her gün saat 12:00 da "daily-market" güncellenecek.
