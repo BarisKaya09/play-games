@@ -50,6 +50,9 @@ export enum Error {
   MARKET_IS_EMPTY = "MARKET_IS_EMPTY",
   MARKET_ITEM_NOT_FOUND = "MARKET_ITEM_NOT_FOUND",
   YOU_CANNOT_BUY_YOUR_OWN_ITEM = "YOU_CANNOT_BUY_YOUR_OWN_ITEM",
+
+  NO_STACK_TO_SPLIT = "NO_STACK_TO_SPLIT",
+  SPLIT_SIZE_CANNOT_EXCEED_STACK = "SPLIT_SIZE_CANNOT_EXCEED_STACK",
 }
 
 export enum ErrorMessage {
@@ -94,6 +97,9 @@ export enum ErrorMessage {
   MARKET_IS_EMPTY = "Market Boş!",
   MARKET_ITEM_NOT_FOUND = "Markette bu item bulunamadı!",
   YOU_CANNOT_BUY_YOUR_OWN_ITEM = "Kendi ürününüzü satın alamazsınız!",
+
+  NO_STACK_TO_SPLIT = "Bölünebilecek istif yok!",
+  SPLIT_SIZE_CANNOT_EXCEED_STACK = "Bölünme boyutu istif boyutunu aşamaz!",
 }
 
 export type SuccessResponse = {
@@ -340,3 +346,19 @@ export const DIFFERENT_ITEMS: UnsuccessResponse = {
     message: ErrorMessage.DIFFERENT_ITEMS,
   },
 } as UnsuccessResponse;
+
+export const NO_STACK_TO_SPLIT: UnsuccessResponse = {
+  status: StatusCode.BadRequest,
+  error: {
+    error: Error.NO_STACK_TO_SPLIT,
+    message: ErrorMessage.NO_STACK_TO_SPLIT,
+  },
+};
+
+export const SPLIT_SIZE_CANNOT_EXCEED_STACK: UnsuccessResponse = {
+  status: StatusCode.BadRequest,
+  error: {
+    error: Error.SPLIT_SIZE_CANNOT_EXCEED_STACK,
+    message: ErrorMessage.SPLIT_SIZE_CANNOT_EXCEED_STACK,
+  },
+};

@@ -10,7 +10,9 @@ import {
   MARKET_IS_EMPTY,
   MARKET_ITEM_NOT_FOUND,
   MISSING_CONTENT,
+  NO_STACK_TO_SPLIT,
   NOT_ENOUGH_STOCK,
+  SPLIT_SIZE_CANNOT_EXCEED_STACK,
   StatusCode,
   THE_RARITY_OF_THE_ITEMS_TO_BE_STACKED_IS_NOT_THE_SAME,
   THE_TYPES_OF_ITEMS_TO_BE_STACKED_ARE_NOT_THE_SAME,
@@ -495,14 +497,68 @@ export const stacKTheItemInInventory = async (req: express.Request, res: express
 
 type SplitItemStackBody = {
   item: InventoryItem;
+  splitSize: number;
 };
-export const splitItemStack = (req: express.Request, res: express.Response) => {
+export const splitItemStack = async (req: express.Request, res: express.Response) => {
   try {
-    const { item } = req.body as SplitItemStackBody;
-    if (!item) {
+    const { item, splitSize } = req.body as SplitItemStackBody;
+    if (!item || !splitSize || splitSize == 0) {
       res.status(MISSING_CONTENT.status).json(MISSING_CONTENT);
       return;
     }
+
+    if (item.item.itemType == ItemType.Container || !("stackable" in item.item)) {
+      res.status(ITEM_CANNOT_BE_STACKED.status).json(ITEM_CANNOT_BE_STACKED);
+      return;
+    }
+
+    if (!item.item.stackable) {
+      res.status(ITEM_CANNOT_BE_STACKED.status).json(ITEM_CANNOT_BE_STACKED);
+      return;
+    }
+
+    if (item.item.stack == 1) {
+      res.status(NO_STACK_TO_SPLIT.status).json(NO_STACK_TO_SPLIT);
+      return;
+    }
+
+    if (splitSize >= item.item.stack) {
+      res.status(SPLIT_SIZE_CANNOT_EXCEED_STACK.status).json(SPLIT_SIZE_CANNOT_EXCEED_STACK);
+      return;
+    }
+
+    item.item.stack -= splitSize;
+
+    const splittedItem = JSON.parse(JSON.stringify(item)) as InventoryItem; //? kopyalama için
+
+    if ("stackable" in splittedItem.item) {
+      splittedItem.item.stack = splitSize;
+    }
+    splittedItem.itemID = uuidV4();
+
+    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const username = req.cookies.username as string;
+    const user = await userRepo.findUser({ username });
+    if (!user) {
+      res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
+      return;
+    }
+    await userRepo.close();
+
+    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const userIventory = await inventoryRepo.findOneInventory({ user_id: user.id });
+    if (!userIventory) {
+      res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
+      return;
+    }
+
+    userIventory.items = userIventory.items.filter((_item) => _item.itemID != item.itemID);
+    userIventory.items.push(item, splittedItem);
+    await inventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: userIventory.items } });
+
+    await inventoryRepo.close();
+
+    res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Öge bölündü!" } as SuccessResponse);
   } catch (err: any) {
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import EndOfTheWorldService from "../../../services/EndOfTheWorldService";
-import { getItemImg, Icon, LoadIcon } from "../../ui";
+import EndOfTheWorldService, { type InventoryItem } from "../../../services/EndOfTheWorldService";
+import { Button, getItemImg, Icon, LoadIcon } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type Effect, type Item, type RarityColor } from "./types";
 import { InventorySystem, type InvGrid } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
@@ -63,7 +63,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
   return (
     <div className="relative w-[140px] h-[120px]">
       {isVisibleItemMenu && !item.empty && item.inventoryItem && (
-        <ItemMenu setIsVisibleItemMenu={setIsVisibleItemMenu} item={item.inventoryItem?.item} />
+        <ItemMenu setIsVisibleItemMenu={setIsVisibleItemMenu} item={item.inventoryItem} inventorySystem={inventorySystem} setInvGrids={setInvGrids} />
       )}
 
       <div
@@ -89,17 +89,20 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
 };
 
 type ItemMenuProps = {
+  item: InventoryItem;
   setIsVisibleItemMenu: React.Dispatch<React.SetStateAction<boolean>>;
-  item: Item;
+  inventorySystem: InventorySystem;
+  setInvGrids: React.Dispatch<React.SetStateAction<Array<InvGrid>>>;
 };
-const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item }) => {
+const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item, inventorySystem, setInvGrids }) => {
   const [isVisibleEffects, setIsVisibleEffects] = useState<boolean>(false);
+  const [isVisibleSplitItemStackMenu, setIsVisibleSplitItemStackMenu] = useState<boolean>(false);
 
   return (
     <div className="absolute w-[180px] h-[250px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-none opacity-95">
       <LoadAnimate atype="expansion" duration={1}>
         <div className="w-full h-[40px] flex justify-between p-3 border-b border-zinc-600">
-          <span className="text-lg text-yellow-600">{item.name.length > 13 ? item.name.slice(0, 13) + "..." : item.name}</span>
+          <span className="text-lg text-yellow-600">{item.item.name.length > 13 ? item.item.name.slice(0, 13) + "..." : item.item.name}</span>
           <div className="w-5 h-full hover:text-rose-500 cursor-pointer" onClick={() => setIsVisibleItemMenu(false)}>
             <Icon _icon={faCrosshairs} />
           </div>
@@ -118,13 +121,53 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item }) => {
               Efektler
               {isVisibleEffects && <Icon _icon={faCaretLeft} className="text-rose-300" />}
             </div>
-            {isVisibleEffects && <ItemEffectsFC item={item} />}
+            {isVisibleEffects && <ItemEffectsFC item={item.item} />}
           </li>
 
-          <li className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center">Ayır</li>
+          <li
+            className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center"
+            onClick={() => setIsVisibleSplitItemStackMenu(true)}
+          >
+            <div className="flex justify-between">
+              Ayır
+              {isVisibleSplitItemStackMenu && "stackable" in item.item && item.item.stack > 1 && (
+                <Icon _icon={faCaretLeft} className="text-rose-300" />
+              )}
+            </div>
+          </li>
+          {isVisibleSplitItemStackMenu && (
+            <li className="w-full h-12 px-2 cursor-pointer hover:text-gray-400 duration-300 flex flex-col justify-center">
+              {isVisibleSplitItemStackMenu && "stackable" in item.item && item.item.stack > 1 && (
+                <SplitItemStackMenu
+                  item={item}
+                  setIsVisibleSplitItemStackMenu={setIsVisibleSplitItemStackMenu}
+                  inventorySystem={inventorySystem}
+                  setInvGrids={setInvGrids}
+                />
+              )}
+            </li>
+          )}
         </ul>
       </LoadAnimate>
     </div>
+  );
+};
+
+type DropDownMenuULProps = {
+  children: any;
+};
+const DropDownMenuUL: React.FC<DropDownMenuULProps> = ({ children }) => {
+  return <ul className="absolute left-48 w-full min-h-[50px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-none">{children}</ul>;
+};
+
+type DropDownMenuLIProps = {
+  children: any;
+};
+const DropDownMenuLI: React.FC<DropDownMenuLIProps> = ({ children }) => {
+  return (
+    <li className="w-full min-h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center my-1 rounded-lg">
+      {children}
+    </li>
   );
 };
 
@@ -148,20 +191,86 @@ const ItemEffectsFC: React.FC<ItemEffectsProps> = ({ item }) => {
   };
 
   return (
-    <ul className="absolute left-48 w-full min-h-[50px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-none">
+    <DropDownMenuUL>
       {"effects" in item ? (
         item.effects.map((effect) => (
-          <li className="w-full min-h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center my-1 rounded-lg">
+          <DropDownMenuLI>
             <div>{effect.description}</div>
             <div className="text-rose-300">{getEffectLevel(effect.effect)}</div>
-          </li>
+          </DropDownMenuLI>
         ))
       ) : (
-        <li className="w-full min-h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center my-1 rounded-lg">
-          İtemin Efekti yok
-        </li>
+        <DropDownMenuLI>İtemin Efekti yok</DropDownMenuLI>
       )}
-    </ul>
+    </DropDownMenuUL>
+  );
+};
+
+type SplitItemStackMenuProps = {
+  item: InventoryItem;
+  setIsVisibleSplitItemStackMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  inventorySystem: InventorySystem;
+  setInvGrids: React.Dispatch<React.SetStateAction<Array<InvGrid>>>;
+};
+const SplitItemStackMenu: React.FC<SplitItemStackMenuProps> = ({ item, setIsVisibleSplitItemStackMenu, inventorySystem, setInvGrids }) => {
+  const [splitSize, setSplitSize] = useState<number>(1);
+  const [isVisibleLoadIcon, setIsVisibleLoadIcon] = useState<boolean>(false);
+
+  const split = async () => {
+    setIsVisibleLoadIcon(true);
+    const data = await EndOfTheWorldService.splitItemStack(item, splitSize);
+    if (data.success) {
+      toast.success(data.data);
+
+      const userInventory = await EndOfTheWorldService.getUserInventory();
+      if (userInventory.success) {
+        for (const [i, item] of userInventory.data.items.entries()) {
+          inventorySystem.placeItem(i, item);
+        }
+
+        setInvGrids([...inventorySystem.getInvGrids()]);
+      } else {
+        toast.error(userInventory.error.message);
+        throw userInventory;
+      }
+    } else {
+      toast.error(data.error.message);
+    }
+    setIsVisibleSplitItemStackMenu(false);
+    setSplitSize(1);
+    setIsVisibleLoadIcon(false);
+  };
+
+  const cancel = () => {
+    setSplitSize(1);
+    setIsVisibleSplitItemStackMenu(false);
+  };
+
+  return (
+    <DropDownMenuUL>
+      <DropDownMenuLI>
+        <input
+          type="range"
+          min={1}
+          max={"stackable" in item.item ? item.item.stack - 1 : 0}
+          onChange={(e) => setSplitSize(parseInt(e.target.value))}
+          value={splitSize}
+        />
+      </DropDownMenuLI>
+
+      <DropDownMenuLI>
+        <div className="mb-3">{splitSize} adet öge bölünüyor</div>
+
+        <div className="w-full flex justify-end gap-3 mb-2">
+          <Button onClick={() => cancel()} bg="rose" style={{ width: "80px", height: "30px", fontSize: "14px" }}>
+            İptal
+          </Button>
+          <Button onClick={split} bg="emerald" style={{ width: "80px", height: "30px", fontSize: "14px" }}>
+            Ayır
+          </Button>
+        </div>
+      </DropDownMenuLI>
+    </DropDownMenuUL>
   );
 };
 

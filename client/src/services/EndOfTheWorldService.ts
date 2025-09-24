@@ -17,6 +17,7 @@ export type Inventory = {
 
 export default class EndOfTheWorldService {
   private static readonly GET_USER_INVENTORY_ENDPOINT: string = import.meta.env.VITE_GET_USER_INVENTORY_ENDPOINT as string;
+  private static readonly SPLIT_ITEM_STACK_ENDPOINT: string = import.meta.env.VITE_SPLIT_ITEM_STACK_ENDPOINT as string;
   private static readonly GET_DAILY_MARKET_ENDPOINT: string = import.meta.env.VITE_GET_DAILY_MARKET_ENDPOINT as string;
   private static readonly BUY_ITEM_IN_DAILY_MARKET_ENDPOINT: string = import.meta.env.VITE_BUY_ITEM_IN_DAILY_MARKET_ENDPOINT as string;
   private static readonly SELL_ITEM_IN_MARKET_ENDPOINT: string = import.meta.env.VITE_SELL_ITEM_IN_MARKET_ENDPOINT as string;
@@ -29,6 +30,15 @@ export default class EndOfTheWorldService {
   public static async getUserInventory(): Promise<SuccessResponse<Inventory> | UnsuccessResponse> {
     try {
       const { data } = await axios.get<SuccessResponse<Inventory>>(this.GET_USER_INVENTORY_ENDPOINT, { withCredentials: true });
+      return response.success(data.status, data.data);
+    } catch (err: any) {
+      return response.unsuccess(err.response.data.status, err.response.data.error);
+    }
+  }
+
+  public static async splitItemStack(item: InventoryItem, splitSize: number): Promise<SuccessResponse<string> | UnsuccessResponse> {
+    try {
+      const { data } = await axios.post<SuccessResponse<string>>(this.SPLIT_ITEM_STACK_ENDPOINT, { item, splitSize }, { withCredentials: true });
       return response.success(data.status, data.data);
     } catch (err: any) {
       return response.unsuccess(err.response.data.status, err.response.data.error);

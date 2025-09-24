@@ -17,6 +17,7 @@ import IceSalmon from "../assets/ice-salmon.png";
 import CrystalCarp from "../assets/crystal-carp.png";
 import AncientIcefish from "../assets/ancient-ice-fish.png";
 import TShirt from "../assets/tShirt.png";
+import Painkiller from "../assets/painkiller.png";
 
 export const getItemImg = (itemName: string): string => {
   switch (itemName) {
@@ -91,6 +92,7 @@ export const getItemImg = (itemName: string): string => {
     case ItemNames.Bandage:
     case ItemNames.Medkit:
     case ItemNames.Painkiller:
+      return Painkiller;
     case ItemNames.AntibioticPills:
     default:
       return "";
@@ -188,10 +190,14 @@ export const Button: React.FC<ButtonProps> = ({ children, style, bg, disabled, o
   );
 };
 
-export const LoadIcon: React.FC = () => {
+type LoadIconProps = {
+  width?: string;
+  height?: string;
+};
+export const LoadIcon: React.FC<LoadIconProps> = ({ width, height }) => {
   return (
-    <div className="w-full text-7xl flex justify-center">
-      <Icon _icon={faSpinner} className="animate-spin text-rose-500" />
+    <div className="text-7xl flex justify-center" style={{ width: width ? width : "100%", height: height ? height : "100%" }}>
+      <Icon _icon={faSpinner} className="w-full h-full animate-spin text-rose-500" />
     </div>
   );
 };
