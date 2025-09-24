@@ -37,21 +37,19 @@ export const getUserInventory = async (req: express.Request, res: express.Respon
   try {
     const username: string = req.cookies.username as string;
 
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const user = await userRepo.findUser({ username: username });
     if (!user) {
       res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
       return;
     }
-    await userRepo.close();
 
-    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const inventoryRepo = new InventoryRepository();
     const userInventory = await inventoryRepo.findOneInventory({ user_id: user.id });
     if (!userInventory) {
       res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
       return;
     }
-    await inventoryRepo.close();
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: userInventory } as SuccessResponse);
   } catch (err: any) {
@@ -61,13 +59,12 @@ export const getUserInventory = async (req: express.Request, res: express.Respon
 
 export const getDailyMarket = async (req: express.Request, res: express.Response) => {
   try {
-    const dailyMarketRepo = new DailyMarketRepository(process.env.MONGODB_URI as string);
+    const dailyMarketRepo = new DailyMarketRepository();
     const dailyMarket = await dailyMarketRepo.findDailyMarket();
     if (!dailyMarket) {
       res.status(DAILY_MARKET_NOT_FOUND.status).json(DAILY_MARKET_NOT_FOUND);
       return;
     }
-    await dailyMarketRepo.close();
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: dailyMarket } as SuccessResponse);
   } catch (err: any) {
@@ -96,22 +93,21 @@ export const buyItemInDailyMarket = async (req: express.Request, res: express.Re
 
     const username = req.cookies.username as string;
 
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const user = await userRepo.findUser({ username: username });
     if (!user) {
       res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
       return;
     }
-    await userRepo.close();
 
-    const userInventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const userInventoryRepo = new InventoryRepository();
     const userInventory = await userInventoryRepo.findOneInventory({ user_id: user.id });
     if (!userInventory) {
       res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
       return;
     }
 
-    const dailyMarketRepo = new DailyMarketRepository(process.env.MONGODB_URI as string);
+    const dailyMarketRepo = new DailyMarketRepository();
     const dailyMarket = await dailyMarketRepo.findDailyMarket();
     if (!dailyMarket) {
       res.status(DAILY_MARKET_NOT_FOUND.status).json(DAILY_MARKET_NOT_FOUND);
@@ -144,7 +140,6 @@ export const buyItemInDailyMarket = async (req: express.Request, res: express.Re
       }
     }
     await userInventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: userInventory.items } });
-    await userInventoryRepo.close();
 
     const buyingItemIndex = dailyMarket.items.findIndex((item) => item.id == itemID);
     dailyMarket.items[buyingItemIndex].stock -= amount;
@@ -152,7 +147,6 @@ export const buyItemInDailyMarket = async (req: express.Request, res: express.Re
       dailyMarket.items = dailyMarket.items.filter((item) => item.id != itemID);
     }
     await dailyMarketRepo.updateOneDailyMarket({ id: dailyMarket.id }, { $set: { items: dailyMarket.items } });
-    await dailyMarketRepo.close();
 
     res.status(StatusCode.OK).json({
       status: StatusCode.OK,
@@ -182,21 +176,21 @@ export const buyItemInMarket = async (req: express.Request, res: express.Respons
     }
 
     const username = req.cookies.username as string;
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const user = await userRepo.findUser({ username: username });
     if (!user) {
       res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
       return;
     }
 
-    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const inventoryRepo = new InventoryRepository();
     const userInventory = await inventoryRepo.findOneInventory({ user_id: user.id });
     if (!userInventory) {
       res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
       return;
     }
 
-    const marketRepo = new MarketRepository(process.env.MONGODB_URI as string);
+    const marketRepo = new MarketRepository();
     let marketItems = await marketRepo.findAllItem();
     if (marketItems.length == 0) {
       res.status(MARKET_IS_EMPTY.status).json(MARKET_IS_EMPTY);
@@ -251,10 +245,6 @@ export const buyItemInMarket = async (req: express.Request, res: express.Respons
       { $set: { money: itemOwnerInventory.money + buyingItem.value * amount } }
     );
 
-    await userRepo.close();
-    await inventoryRepo.close();
-    await marketRepo.close();
-
     res.status(StatusCode.OK).json({
       status: StatusCode.OK,
       data: `${amount} adet ${buyingItem.item.name} ${buyingItem.value * amount} değerine satın alındı!`,
@@ -280,15 +270,14 @@ export const sellItemInMarket = async (req: express.Request, res: express.Respon
     }
 
     const username = req.cookies.username as string;
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const user = await userRepo.findUser({ username: username });
     if (!user) {
       res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
       return;
     }
-    await userRepo.close();
 
-    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const inventoryRepo = new InventoryRepository();
     const userInventory = await inventoryRepo.findOneInventory({ user_id: user.id });
     if (!userInventory) {
       res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
@@ -311,7 +300,7 @@ export const sellItemInMarket = async (req: express.Request, res: express.Respon
       return;
     }
 
-    const marketRepo = new MarketRepository(process.env.MONGODB_URI as string);
+    const marketRepo = new MarketRepository();
 
     if ("stack" in sellingItem.item) {
       if (!sellingItem.item.stackable) {
@@ -344,9 +333,6 @@ export const sellItemInMarket = async (req: express.Request, res: express.Respon
       await inventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: newUserInventory } });
     }
 
-    await marketRepo.close();
-    await inventoryRepo.close();
-
     res.status(StatusCode.OK).json({
       status: StatusCode.OK,
       data: `${sellAmount} adet ${sellingItem.item.name} ${value * sellAmount} değerine satıldı!`,
@@ -358,9 +344,8 @@ export const sellItemInMarket = async (req: express.Request, res: express.Respon
 
 export const getMarket = async (req: express.Request, res: express.Response) => {
   try {
-    const marketRepo = new MarketRepository(process.env.MONGODB_URI as string);
+    const marketRepo = new MarketRepository();
     const market = await marketRepo.findAllItem();
-    await marketRepo.close();
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: market } as SuccessResponse);
   } catch (err: any) {
@@ -380,21 +365,21 @@ export const deleteItemInMarket = async (req: express.Request, res: express.Resp
       return;
     }
 
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const user = await userRepo.findUser({ id: ownerID });
     if (!user) {
       res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
       return;
     }
 
-    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const inventoryRepo = new InventoryRepository();
     const userInventory = await inventoryRepo.findOneInventory({ user_id: user.id });
     if (!userInventory) {
       res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
       return;
     }
 
-    const marketRepo = new MarketRepository(process.env.MONGODB_URI as string);
+    const marketRepo = new MarketRepository();
     const deletedItem = await marketRepo.findOneItem({ itemID: itemID });
     if (!deletedItem) {
       res.status(MARKET_ITEM_NOT_FOUND.status).json(MARKET_ITEM_NOT_FOUND);
@@ -405,10 +390,6 @@ export const deleteItemInMarket = async (req: express.Request, res: express.Resp
 
     userInventory.items.push({ itemID: deletedItem.itemID, item: deletedItem.item, value: deletedItem.value } as InventoryItem);
     await inventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: userInventory.items } });
-
-    await userRepo.close();
-    await inventoryRepo.close();
-    await marketRepo.close();
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Eşya marketten kaldırıldı!" } as SuccessResponse);
   } catch (err: any) {
@@ -429,14 +410,14 @@ export const stacKTheItemInInventory = async (req: express.Request, res: express
     }
 
     const username = req.cookies.username as string;
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const user = await userRepo.findUser({ username: username });
     if (!user) {
       res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
       return;
     }
 
-    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const inventoryRepo = new InventoryRepository();
     const userInventory = await inventoryRepo.findOneInventory({ user_id: user.id });
     if (!userInventory) {
       res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
@@ -486,9 +467,6 @@ export const stacKTheItemInInventory = async (req: express.Request, res: express
 
     await inventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: userInventory.items.filter((item) => item.itemID != itemID) } });
 
-    await userRepo.close();
-    await inventoryRepo.close();
-
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Öğeler istiflendi!" } as SuccessResponse);
   } catch (err: any) {
     res.status(ANY_ERROR.status).json(ANY_ERROR);
@@ -536,16 +514,15 @@ export const splitItemStack = async (req: express.Request, res: express.Response
     }
     splittedItem.itemID = uuidV4();
 
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const username = req.cookies.username as string;
     const user = await userRepo.findUser({ username });
     if (!user) {
       res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
       return;
     }
-    await userRepo.close();
 
-    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const inventoryRepo = new InventoryRepository();
     const userIventory = await inventoryRepo.findOneInventory({ user_id: user.id });
     if (!userIventory) {
       res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
@@ -560,8 +537,6 @@ export const splitItemStack = async (req: express.Request, res: express.Response
     userIventory.items = userIventory.items.filter((_item) => _item.itemID != item.itemID);
     userIventory.items.push(item, splittedItem);
     await inventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: userIventory.items } });
-
-    await inventoryRepo.close();
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Öge bölündü!" } as SuccessResponse);
   } catch (err: any) {

@@ -1,4 +1,5 @@
 import { MongoClient, type Collection, type Document, type UpdateFilter, type UpdateResult } from "mongodb";
+import { getMongoClient } from "./client";
 
 export type FastTypingGameStatistics = {
   correctWords: number;
@@ -25,12 +26,6 @@ export type User = {
 };
 
 export class UserRepository {
-  private client: MongoClient;
-
-  constructor(uri: string) {
-    this.client = new MongoClient(uri);
-  }
-
   public async insertUser(id: string, username: string, email: string, password: string) {
     const user: User = {
       id: id,
@@ -52,22 +47,18 @@ export class UserRepository {
       } as SnakeGameRecordStatistics,
     } as User;
 
-    await this.collection().insertOne(user);
+    await (await this.collection()).insertOne(user);
   }
 
   public async findUser(filter: Partial<Record<keyof User, any>>): Promise<User | null> {
-    return await this.collection().findOne<User>(filter);
+    return await (await this.collection()).findOne<User>(filter);
   }
 
   public async updateOne(filter: Partial<Record<keyof User, any>>, update: Document[] | UpdateFilter<Document>): Promise<UpdateResult> {
-    return await this.collection().updateOne(filter, update);
+    return await (await this.collection()).updateOne(filter, update);
   }
 
-  private collection(): Collection {
-    return this.client.db("play-games").collection("users");
-  }
-
-  public async close() {
-    await this.client.close();
+  private async collection(): Promise<Collection> {
+    return (await getMongoClient()).db("play-games").collection("users");
   }
 }

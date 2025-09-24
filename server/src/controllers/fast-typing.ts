@@ -23,7 +23,7 @@ export const saveStatistics = async (req: express.Request, res: express.Response
     type StatisticsBody = { correctWords: number; wrongWords: number };
     const { correctWords, wrongWords }: StatisticsBody = req.body as StatisticsBody;
 
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const username = req.cookies.username as string;
     const user = await userRepo.findUser({ username: username });
 
@@ -52,7 +52,7 @@ export const saveStatistics = async (req: express.Request, res: express.Response
 export const getStatistics = async (req: express.Request, res: express.Response) => {
   try {
     const username = req.cookies.username as string;
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
 
     const user = await userRepo.findUser({ username: username });
     if (!user) {
@@ -61,8 +61,6 @@ export const getStatistics = async (req: express.Request, res: express.Response)
     }
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: user.fastTyping } as SuccessResponse);
-
-    await userRepo.close();
   } catch (err: any) {
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }

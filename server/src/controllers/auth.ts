@@ -40,7 +40,7 @@ export const signup = async (req: express.Request, res: express.Response) => {
       return;
     }
 
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
 
     const founded = await userRepo.findUser({ username: username });
     if (founded) {
@@ -54,12 +54,8 @@ export const signup = async (req: express.Request, res: express.Response) => {
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Kullanıcı eklendi!" } as SuccessResponse);
 
-    await userRepo.close();
-
-    const inventoryRepo = new InventoryRepository(process.env.MONGODB_URI as string);
+    const inventoryRepo = new InventoryRepository();
     await inventoryRepo.insertInventory(user_id);
-
-    await inventoryRepo.close();
   } catch (err: any) {
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }
@@ -75,7 +71,7 @@ export const signin = async (req: express.Request, res: express.Response) => {
       return;
     }
 
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
 
     const user = await userRepo.findUser({ username: username });
     if (!user) {
@@ -93,8 +89,6 @@ export const signin = async (req: express.Request, res: express.Response) => {
     res.cookie("username", username, { httpOnly: true, maxAge: 3600000, secure: true });
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Giriş yapıldı!" } as SuccessResponse);
-
-    await userRepo.close();
   } catch (err: any) {
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }

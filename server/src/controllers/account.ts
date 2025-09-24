@@ -16,7 +16,7 @@ import validator from "validator";
 export const getAccount = async (req: express.Request, res: express.Response) => {
   try {
     const username = req.cookies.username as string;
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
 
     const user = await userRepo.findUser({ username: username });
     if (!user) {
@@ -26,8 +26,6 @@ export const getAccount = async (req: express.Request, res: express.Response) =>
 
     const account = { username: user.username, email: user.email };
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: account } as SuccessResponse);
-
-    await userRepo.close();
   } catch (err: any) {
     res.status(ANY_ERROR.status).json(ANY_ERROR);
   }
@@ -44,7 +42,7 @@ export const changeUsername = async (req: express.Request, res: express.Response
     }
 
     const username = req.cookies.username as string;
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
 
     const user = await userRepo.findUser({ username: username });
     if (!user) {
@@ -58,7 +56,6 @@ export const changeUsername = async (req: express.Request, res: express.Response
     }
 
     await userRepo.updateOne({ username: username }, { $set: { username: newUsername } });
-    await userRepo.close();
 
     const newToken = jwt.sign({ username }, process.env.JWT_SECRET_KEY as string, { expiresIn: "2h" });
 
@@ -85,7 +82,7 @@ export const changeEmail = async (req: express.Request, res: express.Response) =
     }
 
     const username = req.cookies.username as string;
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
 
     const user = await userRepo.findUser({ username: username });
     if (!user) {
@@ -99,7 +96,6 @@ export const changeEmail = async (req: express.Request, res: express.Response) =
     }
 
     await userRepo.updateOne({ username: username }, { $set: { email: newEmail } });
-    await userRepo.close();
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Email adresi değiştirildi!" } as SuccessResponse);
   } catch (err: any) {

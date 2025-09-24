@@ -214,10 +214,8 @@ type SplitItemStackMenuProps = {
 };
 const SplitItemStackMenu: React.FC<SplitItemStackMenuProps> = ({ item, setIsVisibleSplitItemStackMenu, inventorySystem, setInvGrids }) => {
   const [splitSize, setSplitSize] = useState<number>(1);
-  const [isVisibleLoadIcon, setIsVisibleLoadIcon] = useState<boolean>(false);
 
   const split = async () => {
-    setIsVisibleLoadIcon(true);
     const data = await EndOfTheWorldService.splitItemStack(item, splitSize);
     if (data.success) {
       toast.success(data.data);
@@ -238,7 +236,6 @@ const SplitItemStackMenu: React.FC<SplitItemStackMenuProps> = ({ item, setIsVisi
     }
     setIsVisibleSplitItemStackMenu(false);
     setSplitSize(1);
-    setIsVisibleLoadIcon(false);
   };
 
   const cancel = () => {

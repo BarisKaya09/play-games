@@ -11,7 +11,7 @@ export const saveSnakeGameRecordStatistics = async (req: express.Request, res: e
       return;
     }
 
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const username = req.cookies.username as string;
 
     const user = await userRepo.findUser({ username: username });
@@ -33,8 +33,6 @@ export const saveSnakeGameRecordStatistics = async (req: express.Request, res: e
 
     await userRepo.updateOne({ username: user.username }, { $set: { snakeGameRecord: newSnakeGameRecord } });
 
-    await userRepo.close();
-
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Yeni rekorunuz kaydedildi!" } as SuccessResponse);
   } catch (err: any) {
     res.status(ANY_ERROR.status).json(ANY_ERROR);
@@ -43,7 +41,7 @@ export const saveSnakeGameRecordStatistics = async (req: express.Request, res: e
 
 export const getSnakeGameRecord = async (req: express.Request, res: express.Response) => {
   try {
-    const userRepo = new UserRepository(process.env.MONGODB_URI as string);
+    const userRepo = new UserRepository();
     const username = req.cookies.username as string;
 
     const user = await userRepo.findUser({ username });
@@ -51,7 +49,6 @@ export const getSnakeGameRecord = async (req: express.Request, res: express.Resp
       res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
       return;
     }
-    await userRepo.close();
 
     res.status(StatusCode.OK).json({ status: StatusCode.OK, data: user.snakeGameRecord } as SuccessResponse);
   } catch (err: any) {

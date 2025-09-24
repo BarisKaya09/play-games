@@ -1,6 +1,7 @@
 import { MongoClient, type Collection, type Document, type UpdateFilter, type UpdateResult } from "mongodb";
 import { allItems, Rarity, type Item } from "./data/items";
 import { v4 as uuidV4 } from "uuid";
+import { getMongoClient } from "../client";
 
 const MAX_DAILY_MARKET_ITEM = 50;
 
@@ -34,12 +35,6 @@ type DailyMarket = {
 };
 
 export class DailyMarketRepository {
-  private client: MongoClient;
-
-  constructor(uri: string) {
-    this.client = new MongoClient(uri);
-  }
-
   public async insertDailyMarket() {
     const dailyMarket: DailyMarket = {
       id: uuidV4(),
@@ -56,32 +51,28 @@ export class DailyMarketRepository {
       } as DailyMarketItem);
     }
 
-    await this.collection().insertOne(dailyMarket);
+    await (await this.collection()).insertOne(dailyMarket);
   }
 
   public async findDailyMarket(): Promise<DailyMarket | null> {
-    const dailyMarket = await this.collection().find<DailyMarket>({}).toArray();
+    const dailyMarket = await (await this.collection()).find<DailyMarket>({}).toArray();
     return dailyMarket.length > 0 ? dailyMarket[0] : null;
   }
 
   public async findItem(itemID: string): Promise<DailyMarketItem | undefined> {
-    const dailyMarket = await this.collection().find<DailyMarket>({}).toArray();
+    const dailyMarket = await (await this.collection()).find<DailyMarket>({}).toArray();
     return dailyMarket[0].items.find((item) => item.id == itemID);
   }
 
   public async updateOneDailyMarket(filter: { id: string }, update: Document[] | UpdateFilter<Document>): Promise<UpdateResult> {
-    return await this.collection().updateOne(filter, update);
+    return await (await this.collection()).updateOne(filter, update);
   }
 
   public async deleteDailyMarket(filter: { id: string }) {
-    await this.collection().deleteOne(filter);
+    await (await this.collection()).deleteOne(filter);
   }
 
-  private collection(): Collection {
-    return this.client.db("play-games").collection("daily-market");
-  }
-
-  public async close() {
-    await this.client.close();
+  private async collection(): Promise<Collection> {
+    return (await getMongoClient()).db("play-games").collection("daily-market");
   }
 }
