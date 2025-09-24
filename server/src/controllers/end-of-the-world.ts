@@ -552,6 +552,11 @@ export const splitItemStack = async (req: express.Request, res: express.Response
       return;
     }
 
+    if (!userIventory.items.find((_item) => _item.itemID == item.itemID)) {
+      res.status(ITEM_NOT_FOUND_IN_USER_INVENTORY.status).json(ITEM_NOT_FOUND_IN_USER_INVENTORY);
+      return;
+    }
+
     userIventory.items = userIventory.items.filter((_item) => _item.itemID != item.itemID);
     userIventory.items.push(item, splittedItem);
     await inventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: userIventory.items } });

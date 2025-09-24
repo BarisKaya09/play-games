@@ -62,7 +62,6 @@ export type Food = {
   name: string; //TODO: Tipi sonra değişecek.
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -95,7 +94,6 @@ export type Clothes = {
   name: string; //TODO: Tipi sonradan değişecek.
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -114,7 +112,6 @@ export type Weapon = {
   name: string; // TODO: Tipi sonra değişecek
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -136,7 +133,6 @@ export type Container = {
   name: string; // Todo: Tipi sonradan değişecek
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   capacity: number; // depo büyüklüğü
   items: Array<Food | Clothes | Weapon | Bullet | Valuable | Medical>;
@@ -150,7 +146,6 @@ export type Bullet = {
   name: string; // TODO: Tipi sonradan değişecek
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -167,7 +162,6 @@ export type Valuable = {
   name: string;
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -195,7 +189,6 @@ export type Medical = {
   name: string;
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;

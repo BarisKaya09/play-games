@@ -126,7 +126,6 @@ export type Food = {
   name: string; //TODO: Tipi sonra değişecek.
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -200,7 +199,6 @@ export type Clothes = {
   name: string; //TODO: Tipi sonradan değişecek.
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -219,7 +217,6 @@ export type Weapon = {
   name: string; // TODO: Tipi sonra değişecek
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -241,7 +238,6 @@ export type Container = {
   name: string; // Todo: Tipi sonradan değişecek
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   capacity: number; // depo büyüklüğü
   items: Array<Food | Clothes | Weapon | Bullet | Valuable | Medical>;
@@ -255,7 +251,6 @@ export type Bullet = {
   name: string; // TODO: Tipi sonradan değişecek
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -272,7 +267,6 @@ export type Valuable = {
   name: string;
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -326,7 +320,6 @@ export type Medical = {
   name: string;
   itemType: ItemType;
   rarity: Rarity;
-  img: string;
 
   stack: number;
   stackSize: number;
@@ -348,7 +341,6 @@ export const CannedBeans: Food = {
   name: "Konserve Fasulye",
   itemType: ItemType.Food,
   rarity: Rarity.Common,
-  img: "",
 
   stack: 0,
   stackSize: 10,
@@ -367,7 +359,6 @@ export const SurvivalBiscuits: Food = {
   name: "Hayatta Kalma Bisküvileri",
   itemType: ItemType.Food,
   rarity: Rarity.Common,
-  img: "",
 
   stack: 0,
   stackSize: 10,
@@ -386,7 +377,6 @@ export const AncientChocolateBar: Food = {
   name: "Eski Çikolata",
   itemType: ItemType.Food,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -405,7 +395,6 @@ export const Somon: Food = {
   name: "Somon",
   itemType: ItemType.Food,
   rarity: Rarity.Epic,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -424,7 +413,6 @@ export const Water: Food = {
   name: "Su",
   itemType: ItemType.Food,
   rarity: Rarity.Uncommon,
-  img: "",
 
   stack: 0,
   stackSize: 10,
@@ -443,7 +431,6 @@ export const Meat: Food = {
   name: "Et",
   itemType: ItemType.Food,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -462,7 +449,6 @@ export const RottenMeat: Food = {
   name: "Çürük Et",
   itemType: ItemType.Food,
   rarity: Rarity.Common,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -481,7 +467,6 @@ export const SmallTrout: Food = {
   name: "Küçük Alabalık",
   itemType: ItemType.Food,
   rarity: Rarity.Common,
-  img: "",
 
   stack: 0,
   stackSize: 10,
@@ -499,7 +484,6 @@ export const Perch: Food = {
   name: "Sarı Levrek",
   itemType: ItemType.Food,
   rarity: Rarity.Common,
-  img: "",
 
   stack: 0,
   stackSize: 10,
@@ -517,7 +501,6 @@ export const ArcticChar: Food = {
   name: "Kutup Balığı",
   itemType: ItemType.Food,
   rarity: Rarity.Uncommon,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -535,7 +518,6 @@ export const NorthernPike: Food = {
   name: "Turna Balığı",
   itemType: ItemType.Food,
   rarity: Rarity.Uncommon,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -553,7 +535,6 @@ export const Whitefish: Food = {
   name: "Beyaz Balık",
   itemType: ItemType.Food,
   rarity: Rarity.Uncommon,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -571,7 +552,6 @@ export const IceSalmon: Food = {
   name: "Buz Somonu",
   itemType: ItemType.Food,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 3,
@@ -589,7 +569,6 @@ export const CrystalCarp: Food = {
   name: "Kristal Sazan",
   itemType: ItemType.Food,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 3,
@@ -607,7 +586,6 @@ export const AncientIcefish: Food = {
   name: "Antik Buz Balığı",
   itemType: ItemType.Food,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -647,7 +625,6 @@ export const TShirt: Clothes = {
   name: "Tişört",
   itemType: ItemType.Clothes,
   rarity: Rarity.Common,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -664,7 +641,6 @@ export const Shorts: Clothes = {
   name: "Şort",
   itemType: ItemType.Clothes,
   rarity: Rarity.Common,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -681,7 +657,6 @@ export const Sweater: Clothes = {
   name: "Kazak",
   itemType: ItemType.Clothes,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -698,7 +673,6 @@ export const Jacket: Clothes = {
   name: "Mont",
   itemType: ItemType.Clothes,
   rarity: Rarity.Epic,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -715,7 +689,6 @@ export const MilitaryJacket: Clothes = {
   name: "Askeri Mont",
   itemType: ItemType.Clothes,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -732,7 +705,6 @@ export const Pants: Clothes = {
   name: "Pantolon",
   itemType: ItemType.Clothes,
   rarity: Rarity.Uncommon,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -749,7 +721,6 @@ export const CargoPants: Clothes = {
   name: "Kargo Pantolon",
   itemType: ItemType.Clothes,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -766,7 +737,6 @@ export const Sneakers: Clothes = {
   name: "Spor Ayakkabı",
   itemType: ItemType.Clothes,
   rarity: Rarity.Uncommon,
-  img: "",
 
   stack: 0,
   stackSize: 5,
@@ -783,7 +753,6 @@ export const MilitaryBoots: Clothes = {
   name: "Askeri Ayakkabı",
   itemType: ItemType.Clothes,
   rarity: Rarity.Epic,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -800,7 +769,6 @@ export const MotorcycleHelmet: Clothes = {
   name: "Motosiklet Kaskı",
   itemType: ItemType.Clothes,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -817,7 +785,6 @@ export const LightMilitaryHelmet: Clothes = {
   name: "Hafif Askeri Kask",
   itemType: ItemType.Clothes,
   rarity: Rarity.Epic,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -834,7 +801,6 @@ export const HeavyMilitaryHelmet: Clothes = {
   name: "Ağır Askeri Kask",
   itemType: ItemType.Clothes,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -869,7 +835,6 @@ export const Glock18: Weapon = {
   name: "Glock18 (Yarı otomatik tabanca)",
   itemType: ItemType.Weapon,
   rarity: Rarity.Epic,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -889,7 +854,6 @@ export const Colt1911: Weapon = {
   name: "Colt M1911 (Klasik tabanca)",
   itemType: ItemType.Weapon,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -909,7 +873,6 @@ export const AK47: Weapon = {
   name: "AK-47 (Taarruz tüfeği)",
   itemType: ItemType.Weapon,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -929,7 +892,6 @@ export const M4A1: Weapon = {
   name: "M4A1 (Modern Amerikan tüfeği)",
   itemType: ItemType.Weapon,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -949,7 +911,6 @@ export const Remington870: Weapon = {
   name: "Remington 870 (Pompalı av tüfeği)",
   itemType: ItemType.Weapon,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -969,7 +930,6 @@ export const BarrettM82: Weapon = {
   name: "Barrett M82 (Ağır keskin nişancı tüfeği)",
   itemType: ItemType.Weapon,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -989,7 +949,6 @@ export const KaBarKnife: Weapon = {
   name: "KA-BAR Knife (Askeri bıçak)",
   itemType: ItemType.Weapon,
   rarity: Rarity.Uncommon,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1007,7 +966,6 @@ export const Machete: Weapon = {
   name: "Pala",
   itemType: ItemType.Weapon,
   rarity: Rarity.Uncommon,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1025,7 +983,6 @@ export const LouisvilleSlugger: Weapon = {
   name: "Louisville Slugger (Markalı beyzbol sopası)",
   itemType: ItemType.Weapon,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1043,7 +1000,6 @@ export const StanleyCrowbar: Weapon = {
   name: "Stanley Crowbar (Levye)",
   itemType: ItemType.Weapon,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1077,7 +1033,6 @@ export const Backpack: Container = {
   name: "Sırt Çantası",
   itemType: ItemType.Container,
   rarity: Rarity.Uncommon,
-  img: "",
 
   capacity: 5,
   items: [],
@@ -1101,7 +1056,6 @@ export const BigContainer: Container = {
   name: "Büyük Konteyner",
   itemType: ItemType.Container,
   rarity: Rarity.Epic,
-  img: "",
 
   capacity: 30,
   items: [],
@@ -1118,7 +1072,6 @@ export const PistolBullet: Bullet = {
   name: "Tabanca Mermisi",
   itemType: ItemType.Bullet,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 64,
@@ -1133,7 +1086,6 @@ export const RifleBullet: Bullet = {
   name: "Tüfek Mermisi",
   itemType: ItemType.Bullet,
   rarity: Rarity.Epic,
-  img: "",
 
   stack: 0,
   stackSize: 64,
@@ -1148,7 +1100,6 @@ export const SniperBullet: Bullet = {
   name: "Sniper Mermisi",
   itemType: ItemType.Bullet,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 64,
@@ -1163,7 +1114,6 @@ export const PumpgunBullet: Bullet = {
   name: "Pompalı Tüfek Mermisi",
   itemType: ItemType.Bullet,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 64,
@@ -1183,7 +1133,6 @@ export const GoldRing: Valuable = {
   name: "Altın Yüzük",
   itemType: ItemType.Valuable,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1196,7 +1145,6 @@ export const SilverNecklace: Valuable = {
   name: "Gümüş Kolye",
   itemType: ItemType.Valuable,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1209,7 +1157,6 @@ export const DiamondEarring: Valuable = {
   name: "Elmas Küpe",
   itemType: ItemType.Valuable,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1222,7 +1169,6 @@ export const LuxuryWatch: Valuable = {
   name: "Lüks Saat",
   itemType: ItemType.Valuable,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1235,7 +1181,6 @@ export const OldPainting: Valuable = {
   name: "Eski Tablo",
   itemType: ItemType.Valuable,
   rarity: Rarity.Legendary,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1253,7 +1198,6 @@ export const Bandage: Medical = {
   name: "Bandaj",
   itemType: ItemType.Medical,
   rarity: Rarity.Uncommon,
-  img: "",
 
   stack: 0,
   stackSize: 10,
@@ -1270,7 +1214,6 @@ export const Medkit: Medical = {
   name: "İlk Yardım Çantası",
   itemType: ItemType.Medical,
   rarity: Rarity.Epic,
-  img: "",
 
   stack: 0,
   stackSize: 0,
@@ -1287,7 +1230,6 @@ export const Painkiller: Medical = {
   name: "Ağrı Kesici",
   itemType: ItemType.Medical,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 10,
@@ -1304,7 +1246,6 @@ export const AntibioticPills: Medical = {
   name: "Antibiyotik Haplar",
   itemType: ItemType.Medical,
   rarity: Rarity.Rare,
-  img: "",
 
   stack: 0,
   stackSize: 10,

@@ -190,14 +190,10 @@ export const Button: React.FC<ButtonProps> = ({ children, style, bg, disabled, o
   );
 };
 
-type LoadIconProps = {
-  width?: string;
-  height?: string;
-};
-export const LoadIcon: React.FC<LoadIconProps> = ({ width, height }) => {
+export const LoadIcon: React.FC = () => {
   return (
-    <div className="text-7xl flex justify-center" style={{ width: width ? width : "100%", height: height ? height : "100%" }}>
-      <Icon _icon={faSpinner} className="w-full h-full animate-spin text-rose-500" />
+    <div className="text-7xl flex justify-center">
+      <Icon _icon={faSpinner} className="animate-spin text-rose-500" />
     </div>
   );
 };
