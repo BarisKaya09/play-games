@@ -19,6 +19,22 @@ import AncientIcefish from "../assets/ancient-ice-fish.png";
 import TShirt from "../assets/tShirt.png";
 import Painkiller from "../assets/painkiller.png";
 
+import Jacket from "../assets/jacket.png";
+import MilitaryJacket from "../assets/military-jacket.png";
+import Pants from "../assets/pants.png";
+import CargoPants from "../assets/cargo-pants.png";
+import Sneakers from "../assets/sneakers.png";
+import MilitaryBoots from "../assets/military-boots.png";
+import MotorcycleHelmet from "../assets/motorcycle-helmet.png";
+import HeavyMilitaryHelmet from "../assets/heavy-military-helmet.png";
+import LightMilitaryHelmet from "../assets/light-military-helmet.png";
+import Glock18 from "../assets/glock-18.png";
+import Colt1911 from "../assets/colt1911.png";
+import AK47 from "../assets/ak-47.png";
+import M4A1 from "../assets/m4a1.png";
+import Remington870 from "../assets/remington-870.png";
+import BarrettM82 from "../assets/barrett-M82.png";
+
 export const getItemImg = (itemName: string): string => {
   switch (itemName) {
     case ItemNames.CannedBeans:
@@ -57,20 +73,35 @@ export const getItemImg = (itemName: string): string => {
     case ItemNames.Sweater:
       return Sweater;
     case ItemNames.Jacket:
+      return Jacket;
     case ItemNames.MilitaryJacket:
+      return MilitaryJacket;
     case ItemNames.Pants:
+      return Pants;
     case ItemNames.CargoPants:
+      return CargoPants;
     case ItemNames.Sneakers:
+      return Sneakers;
     case ItemNames.MilitaryBoots:
+      return MilitaryBoots;
     case ItemNames.MotorcycleHelmet:
+      return MotorcycleHelmet;
     case ItemNames.LightMilitaryHelmet:
+      return LightMilitaryHelmet;
     case ItemNames.HeavyMilitaryHelmet:
-    case ItemNames.Glock18:
+      return HeavyMilitaryHelmet;
+    case ItemNames.Glock18: // *
+      return Glock18;
     case ItemNames.Colt1911:
+      return Colt1911;
     case ItemNames.AK47:
+      return AK47;
     case ItemNames.M4A1:
+      return M4A1;
     case ItemNames.Remington870:
+      return Remington870;
     case ItemNames.BarrettM82:
+      return BarrettM82;
     case ItemNames.KaBarKnife:
     case ItemNames.Machete:
       return Machete;

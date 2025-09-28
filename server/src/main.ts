@@ -34,7 +34,7 @@ const main = async () => {
   //? her gün saat 12:00 da "daily-market" güncellenecek.
   cron.schedule("00 12 * * *", async () => {
     try {
-      const dailyMarketRepo = new DailyMarketRepository(process.env.MONGODB_URI as string);
+      const dailyMarketRepo = new DailyMarketRepository();
       const dailyMarket = await dailyMarketRepo.findDailyMarket();
 
       if (dailyMarket) {
@@ -44,8 +44,6 @@ const main = async () => {
 
       await dailyMarketRepo.insertDailyMarket();
       console.info(chalk.bgCyan(`[ ${new Date().toString()} ] Günlük market yenilendi!`));
-
-      await dailyMarketRepo.close();
     } catch (err: any) {
       throw err;
     }

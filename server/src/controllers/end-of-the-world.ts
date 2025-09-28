@@ -640,3 +640,29 @@ export const getMap = (req: express.Request, res: express.Response) => {
 //TODO: Eşyaları ayırma
 
 //TODO: Oyuncular arası trade (Ama bunun için websocet gerekecek).
+
+// dev. controllers
+type GetItemInDailyMarketByName = {
+  itemName: string;
+};
+export const getItemInDailyMarketByName = async (req: express.Request, res: express.Response) => {
+  try {
+    const { itemName } = req.params as GetItemInDailyMarketByName;
+    if (!itemName) {
+      res.status(MISSING_CONTENT.status).json(MISSING_CONTENT);
+      return;
+    }
+
+    const dailyMarketRepo = new DailyMarketRepository();
+    const dailyMarket = await dailyMarketRepo.findDailyMarket();
+    if (!dailyMarket) {
+      res.status(DAILY_MARKET_NOT_FOUND.status).json(DAILY_MARKET_NOT_FOUND);
+      return;
+    }
+
+    const items = dailyMarket.items.filter((item) => item.item.name == itemName);
+    res.status(StatusCode.OK).json({ status: StatusCode.OK, data: items } as SuccessResponse);
+  } catch (err: any) {
+    res.status(ANY_ERROR.status).json(ANY_ERROR);
+  }
+};

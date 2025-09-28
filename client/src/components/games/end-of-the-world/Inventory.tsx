@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import EndOfTheWorldService, { type InventoryItem } from "../../../services/EndOfTheWorldService";
 import { Button, getItemImg, Icon, LoadIcon } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type Effect, type Item, type RarityColor } from "./types";
-import { InventorySystem, MAX_INVENTORY_GRID, type InvGrid } from "./lib/inventory-system";
+import { InventorySystem, type InvGrid } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
 import { faCaretLeft, faCircleArrowLeft, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import LoadAnimate from "../../LoadAnimate";
@@ -48,9 +48,11 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
       const ciData = await EndOfTheWorldService.concatItems(item.inventoryItem as InventoryItem, data.inventoryItem as InventoryItem);
       if (ciData.success) {
         toast.success(ciData.data);
+
         const userInventory = await EndOfTheWorldService.getUserInventory();
         if (userInventory.success) {
           inventorySystem.clearInvGrids();
+
           for (const [i, item] of userInventory.data.items.entries()) {
             inventorySystem.placeItem(i, item);
           }

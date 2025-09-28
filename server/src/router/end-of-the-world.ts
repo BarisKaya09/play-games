@@ -6,6 +6,7 @@ import {
   concatItems,
   deleteItemInMarket,
   getDailyMarket,
+  getItemInDailyMarketByName,
   getMap,
   getMarket,
   getUserInventory,
@@ -27,5 +28,8 @@ router.post("/stacKTheItemInInventory", requireAuth, stacKTheItemInInventory);
 router.post("/splitItemStack", requireAuth, splitItemStack);
 router.post("/concatItems", requireAuth, concatItems);
 router.get("/getMap", requireAuth, getMap);
+
+// dev. routes
+router.get("/getItemInDailyMarketByName/:itemName", requireAuth, getItemInDailyMarketByName);
 
 export default router;
