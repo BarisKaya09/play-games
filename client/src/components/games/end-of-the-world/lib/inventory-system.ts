@@ -1,6 +1,6 @@
 import type { InventoryItem } from "../../../../services/EndOfTheWorldService";
 
-const MAX_INVENTORY_GRID = 100;
+export const MAX_INVENTORY_GRID = 100;
 
 export type InvGrid = {
   index: number;
@@ -45,6 +45,16 @@ export class InventorySystem {
 
   public getInvGrids(): Array<InvGrid> {
     return this.invGrids;
+  }
+
+  public clearInvGrids() {
+    this.invGrids = [];
+    for (let i = 0; i < MAX_INVENTORY_GRID; i++) {
+      this.invGrids.push({
+        index: i,
+        empty: true,
+      } as InvGrid);
+    }
   }
 
   public getInvGrid(index: number): InvGrid {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import EndOfTheWorldService, { type InventoryItem } from "../../../services/EndOfTheWorldService";
 import { Button, getItemImg, Icon, LoadIcon } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type Effect, type Item, type RarityColor } from "./types";
-import { InventorySystem, type InvGrid } from "./lib/inventory-system";
+import { InventorySystem, MAX_INVENTORY_GRID, type InvGrid } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
 import { faCaretLeft, faCircleArrowLeft, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import LoadAnimate from "../../LoadAnimate";
@@ -36,7 +36,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
     setIsDragging(true);
   };
 
-  const dropItem = (e: React.DragEvent<HTMLDivElement>) => {
+  const dropItem = async (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.effectAllowed = "move";
     e.preventDefault();
 
@@ -44,7 +44,26 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
     if (!raw) return;
 
     const data = JSON.parse(raw) as InvGrid;
-    inventorySystem.chnageItemPlace(data, item);
+    if (!data.empty && data.inventoryItem?.item.name == item.inventoryItem?.item.name) {
+      const ciData = await EndOfTheWorldService.concatItems(item.inventoryItem as InventoryItem, data.inventoryItem as InventoryItem);
+      if (ciData.success) {
+        toast.success(ciData.data);
+        const userInventory = await EndOfTheWorldService.getUserInventory();
+        if (userInventory.success) {
+          inventorySystem.clearInvGrids();
+          for (const [i, item] of userInventory.data.items.entries()) {
+            inventorySystem.placeItem(i, item);
+          }
+        } else {
+          toast.error(userInventory.error.message);
+          throw userInventory;
+        }
+      } else {
+        inventorySystem.chnageItemPlace(data, item);
+      }
+    } else {
+      inventorySystem.chnageItemPlace(data, item);
+    }
     setInvGrids([...inventorySystem.getInvGrids()]);
     setIsDragging(false);
   };
@@ -77,7 +96,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
         onDoubleClick={() => setIsVisibleItemMenu(true)}
       >
         {!item.empty && item.inventoryItem && "stackable" in item.inventoryItem.item && item.inventoryItem.item.stackable && (
-          <div className="absolute w-5 h-8 text-slate-400 text-lg font-bold right-3 bottom-0">x{getItemStack()}</div>
+          <div className="absolute w-5 h-8 text-slate-400 text-md font-bold right-2 -bottom-2">x{getItemStack()}</div>
         )}
         <div className="w-full h-full text-center flex flex-col justify-center">
           <span>{item.inventoryItem?.item.name}</span>
@@ -143,6 +162,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item, invento
                   setIsVisibleSplitItemStackMenu={setIsVisibleSplitItemStackMenu}
                   inventorySystem={inventorySystem}
                   setInvGrids={setInvGrids}
+                  setIsVisibleItemMenu={setIsVisibleItemMenu}
                 />
               )}
             </li>
@@ -211,14 +231,25 @@ type SplitItemStackMenuProps = {
   setIsVisibleSplitItemStackMenu: React.Dispatch<React.SetStateAction<boolean>>;
   inventorySystem: InventorySystem;
   setInvGrids: React.Dispatch<React.SetStateAction<Array<InvGrid>>>;
+  setIsVisibleItemMenu: React.Dispatch<React.SetStateAction<boolean>>;
 };
-const SplitItemStackMenu: React.FC<SplitItemStackMenuProps> = ({ item, setIsVisibleSplitItemStackMenu, inventorySystem, setInvGrids }) => {
+const SplitItemStackMenu: React.FC<SplitItemStackMenuProps> = ({
+  item,
+  setIsVisibleSplitItemStackMenu,
+  inventorySystem,
+  setInvGrids,
+  setIsVisibleItemMenu,
+}) => {
   const [splitSize, setSplitSize] = useState<number>(1);
 
   const split = async () => {
     const data = await EndOfTheWorldService.splitItemStack(item, splitSize);
     if (data.success) {
       toast.success(data.data);
+
+      setIsVisibleSplitItemStackMenu(false);
+      setSplitSize(1);
+      setIsVisibleItemMenu(false);
 
       const userInventory = await EndOfTheWorldService.getUserInventory();
       if (userInventory.success) {
@@ -234,8 +265,6 @@ const SplitItemStackMenu: React.FC<SplitItemStackMenuProps> = ({ item, setIsVisi
     } else {
       toast.error(data.error.message);
     }
-    setIsVisibleSplitItemStackMenu(false);
-    setSplitSize(1);
   };
 
   const cancel = () => {
