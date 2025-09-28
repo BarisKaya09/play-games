@@ -3,6 +3,7 @@ import requireAuth from "../middlewares/requireAuth";
 import {
   buyItemInDailyMarket,
   buyItemInMarket,
+  concatItems,
   deleteItemInMarket,
   getDailyMarket,
   getMap,
@@ -24,6 +25,7 @@ router.get("/getMarket", requireAuth, getMarket);
 router.post("/deleteItemInMarket", requireAuth, deleteItemInMarket);
 router.post("/stacKTheItemInInventory", requireAuth, stacKTheItemInInventory);
 router.post("/splitItemStack", requireAuth, splitItemStack);
+router.post("/concatItems", requireAuth, concatItems);
 router.get("/getMap", requireAuth, getMap);
 
 export default router;

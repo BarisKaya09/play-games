@@ -544,6 +544,80 @@ export const splitItemStack = async (req: express.Request, res: express.Response
   }
 };
 
+type ConcatItemsBody = {
+  subItem: InventoryItem;
+  draggedItem: InventoryItem;
+};
+export const concatItems = async (req: express.Request, res: express.Response) => {
+  try {
+    const { subItem, draggedItem } = req.body as ConcatItemsBody;
+    if (!subItem || !draggedItem) {
+      res.status(MISSING_CONTENT.status).json(MISSING_CONTENT);
+      return;
+    }
+
+    if (subItem.item.name != draggedItem.item.name) {
+      res.status(DIFFERENT_ITEMS.status).json(DIFFERENT_ITEMS);
+      return;
+    }
+
+    if (subItem.item.itemType == ItemType.Container || draggedItem.item.itemType == ItemType.Container) {
+      res.status(ITEM_CANNOT_BE_STACKED.status).json(ITEM_CANNOT_BE_STACKED);
+      return;
+    }
+
+    if ("stackable" in subItem.item && "stackable" in draggedItem.item) {
+      if (!subItem.item.stackable && !draggedItem.item.stackable) {
+        res.status(ITEM_CANNOT_BE_STACKED.status).json(ITEM_CANNOT_BE_STACKED);
+        return;
+      }
+    }
+
+    const userRepo = new UserRepository();
+    const username = req.cookies.username as string;
+    const user = await userRepo.findUser({ username });
+    if (!user) {
+      res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
+      return;
+    }
+
+    const inventoryRepo = new InventoryRepository();
+    const userInventory = await inventoryRepo.findOneInventory({ user_id: user.id });
+    if (!userInventory) {
+      res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
+      return;
+    }
+
+    const fsubItem = userInventory.items.find((item) => item.itemID == subItem.itemID);
+    if (!fsubItem) {
+      res.status(ITEM_NOT_FOUND_IN_USER_INVENTORY.status).json(ITEM_NOT_FOUND_IN_USER_INVENTORY);
+      return;
+    }
+
+    const fdraggedItem = userInventory.items.find((item) => item.itemID == draggedItem.itemID);
+    if (!fdraggedItem) {
+      res.status(ITEM_NOT_FOUND_IN_USER_INVENTORY.status).json(ITEM_NOT_FOUND_IN_USER_INVENTORY);
+      return;
+    }
+
+    if ("stackable" in fsubItem.item && "stackable" in fdraggedItem.item) {
+      if (fsubItem.item.stackSize < fsubItem.item.stack + fdraggedItem.item.stack) {
+        res.status(YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE.status).json(YOU_HAVE_EXCEEDED_THE_ITEM_STACK_SIZE);
+        return;
+      }
+
+      fsubItem.item.stack += fdraggedItem.item.stack;
+    }
+
+    userInventory.items = userInventory.items.filter((item) => item.itemID != fdraggedItem.itemID);
+    await inventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { items: userInventory.items } });
+
+    res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Ögeler istiflendi!" } as SuccessResponse);
+  } catch (err: any) {
+    res.status(ANY_ERROR.status).json(ANY_ERROR);
+  }
+};
+
 type GetMapResponseBody = {
   region: "north" | "south" | "west" | "east";
   areas: Array<Area>;
