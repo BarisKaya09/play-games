@@ -18,7 +18,6 @@ import CrystalCarp from "../assets/crystal-carp.png";
 import AncientIcefish from "../assets/ancient-ice-fish.png";
 import TShirt from "../assets/tShirt.png";
 import Painkiller from "../assets/painkiller.png";
-
 import Jacket from "../assets/jacket.png";
 import MilitaryJacket from "../assets/military-jacket.png";
 import Pants from "../assets/pants.png";
@@ -263,6 +262,48 @@ export const InfoBox: React.FC<InfoBoxProps> = ({ children, width, height }) => 
   return (
     <div className="rounded-lg border-l-6 border-l-cyan-700 px-5 bg-gray-900 flex items-center select-none" style={{ width: width, height: height }}>
       {children}
+    </div>
+  );
+};
+
+type StatusBarProps = {
+  width: string;
+  height: string;
+  color: "emerald" | "blue" | "rose" | "orange" | "lime";
+  status: string;
+  children: any;
+};
+export const StatusBar: React.FC<StatusBarProps> = ({ width, height, color, status, children }) => {
+  const border =
+    color == "emerald"
+      ? "border-2 border-emerald-600"
+      : color == "blue"
+      ? "border-2 border-blue-600"
+      : color == "rose"
+      ? "border-2 border-rose-600"
+      : color == "orange"
+      ? "border-2 border-amber-600"
+      : color == "lime"
+      ? "border-2 border-lime-600"
+      : "";
+
+  const bg =
+    color == "emerald"
+      ? "bg-emerald-500"
+      : color == "blue"
+      ? "bg-blue-500"
+      : color == "rose"
+      ? "bg-rose-500"
+      : color == "orange"
+      ? "bg-orange-500"
+      : color == "lime"
+      ? "bg-lime-500"
+      : "";
+
+  return (
+    <div className={`relative rounded-md ${border}`} style={{ width: width, height: height }}>
+      <div className={`absolute h-[95%] ${bg} left-[1px] top-[1px] rounded-sm`} style={{ width: status }}></div>
+      <div className={`absolute left-1/2 top-1/5 w-5 h-5 text-cyan-200`}>{children}</div>
     </div>
   );
 };

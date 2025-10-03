@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import EndOfTheWorldService, { type InventoryItem } from "../../../services/EndOfTheWorldService";
-import { Button, getItemImg, Icon, LoadIcon } from "../../ui";
+import { Button, getItemImg, Icon, LoadIcon, StatusBar } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type Effect, type Item, type RarityColor } from "./types";
 import { InventorySystem, type InvGrid } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
-import { faCaretLeft, faCircleArrowLeft, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import { faCaretLeft, faCircleArrowLeft, faCrosshairs, faDroplet, faHeart, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import LoadAnimate from "../../LoadAnimate";
 import type { ActiveScreen } from "./EndOfTheWorld";
 
@@ -88,9 +88,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
       )}
 
       <div
-        className={`relative w-[140px] h-[120px] bg-zinc-900 border-3 border-zinc-700 ${rareColor} border-none rounded-lg text-sm select-none z-10 hover:border-5 duration-100 ${
-          isDragging && "mask-b-from-80%"
-        }`}
+        className={`relative w-[140px] h-[120px] bg-zinc-900 border-3 border-zinc-700 ${rareColor} border-none rounded-lg text-sm select-none z-10 hover:border-5 duration-100`}
         draggable={!item.empty && true}
         onDragStart={dragItem}
         onDrop={dropItem}
@@ -302,6 +300,26 @@ const SplitItemStackMenu: React.FC<SplitItemStackMenuProps> = ({
   );
 };
 
+const Soldier: React.FC = () => {
+  return (
+    <div className="w-full h-full mt-10">
+      <div className="w-full h-[100px] grid grid-cols-1 gap-2">
+        <StatusBar width="400px" height="40px" color="emerald" status="89%">
+          <Icon _icon={faHeart} className="w-full h-full" />
+        </StatusBar>
+
+        <StatusBar width="400px" height="40px" color="orange" status="20%">
+          <Icon _icon={faUtensils} className="w-full h-full" />
+        </StatusBar>
+
+        <StatusBar width="400px" height="40px" color="blue" status="52%">
+          <Icon _icon={faDroplet} className="w-full h-full" />
+        </StatusBar>
+      </div>
+    </div>
+  );
+};
+
 type InventoryCProps = {
   setActiveScreen: React.Dispatch<React.SetStateAction<ActiveScreen>>;
 };
@@ -341,22 +359,31 @@ const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen }) => {
         </div>
       )}
 
-      <div className="relative w-full h-[90%] p-10 grid grid-cols-10 gap-7 overflow-y-auto">
-        {!isLoadedInventory && (
-          <div className="absolute w-full h-full flex flex-col justify-center">
-            <LoadIcon />
+      {!isLoadedInventory && (
+        <div className="absolute w-full h-full flex flex-col justify-center">
+          <LoadIcon />
+        </div>
+      )}
+
+      {isLoadedInventory && (
+        <div className="w-full h-full flex gap-5 pl-5">
+          <div className="w-1/3 h-full">
+            <Soldier />
           </div>
-        )}
 
-        {isLoadedInventory &&
-          invGrids.map((item) => (
-            <div className="w-[100px] h-[100px]">
-              <InventoryGrid key={item.index} item={item} inventorySystem={inventorySystemRef.current} setInvGrids={setInvGrids} />
+          <div className="w-2/3 h-full">
+            <div className="relative w-full h-[90%] p-10 flex flex-wrap gap-12 overflow-y-auto scroll-smooth">
+              {invGrids.map((item) => (
+                <div className="w-[100px] h-[100px]">
+                  <InventoryGrid key={item.index} item={item} inventorySystem={inventorySystemRef.current} setInvGrids={setInvGrids} />
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
 
-        <ToastContainer />
-      </div>
+          <ToastContainer />
+        </div>
+      )}
     </div>
   );
 };
