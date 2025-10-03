@@ -316,6 +316,10 @@ const Soldier: React.FC = () => {
           <Icon _icon={faDroplet} className="w-full h-full" />
         </StatusBar>
       </div>
+
+      <div className="w-full h-[500px] mt-22 border-2 border-zinc-700 rounded-md shadow-xl p-3 flex flex-wrap">
+        
+      </div>
     </div>
   );
 };

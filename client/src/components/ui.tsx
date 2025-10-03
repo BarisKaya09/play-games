@@ -33,6 +33,9 @@ import AK47 from "../assets/ak-47.png";
 import M4A1 from "../assets/m4a1.png";
 import Remington870 from "../assets/remington-870.png";
 import BarrettM82 from "../assets/barrett-M82.png";
+import LouisvilleSlugger from "../assets/louisville-slugger.png";
+import StanleyCrowbar from "../assets/stanley-crowbar.png";
+import Backpack from "../assets/backpack.png";
 
 export const getItemImg = (itemName: string): string => {
   switch (itemName) {
@@ -104,9 +107,13 @@ export const getItemImg = (itemName: string): string => {
     case ItemNames.KaBarKnife:
     case ItemNames.Machete:
       return Machete;
+
     case ItemNames.LouisvilleSlugger:
+      return LouisvilleSlugger;
     case ItemNames.StanleyCrowbar:
+      return StanleyCrowbar;
     case ItemNames.Backpack:
+      return Backpack;
     case ItemNames.SmallContainer:
       return SmallContainerPng;
     case ItemNames.BigContainer:

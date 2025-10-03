@@ -29,6 +29,9 @@ const Menu: React.FC<MenuProps> = ({ setActiveScreen }) => {
       <div className="w-full h-10">
         <MenuButton onClick={() => setActiveScreen("settings")}>Ayarlar</MenuButton>
       </div>
+      <div className="w-full h-10">
+        <MenuButton onClick={() => (window.location.href = "/")}>Çıkış</MenuButton>
+      </div>
     </div>
   );
 };
@@ -39,7 +42,7 @@ const EndOfTheWorld: React.FC = () => {
   const [activeScreen, setActiveScreen] = useState<ActiveScreen>("menu");
 
   return (
-    <div className={`relative w-[99%] h-[850px] border-2 border-orange-900 rounded-md ${activeScreen != "menu" && "bg-zinc-900"}`}>
+    <div className={`relative w-[99%] h-[850px] border-2 border-orange-900 rounded-md ${activeScreen != "menu" && "bg-zinc-900"} overflow-hidden`}>
       {activeScreen == "menu" && <img src={EndOfTheWorldBanner} className="absolute left-0 top-0 w-full h-full -z-10 mask-b-from-10%" />}
 
       {activeScreen == "menu" && (
