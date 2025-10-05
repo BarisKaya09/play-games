@@ -181,7 +181,7 @@ export const Icon: React.FC<IconProps> = ({ _icon, className }) => {
 // expansion animayasyon tipi elementin scale'i 0 ken 1'e gelen animasyon
 export type AnimType = "top-to-bottom" | "bottom-to-top" | "left-to-right" | "right-to-left" | "expansion";
 export const loadWithAnim = (element: HTMLElement, atype: AnimType, duration: number) => {
-  const observer = new IntersectionObserver((entries, observe) => {
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         setTimeout(() => {

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import EndOfTheWorldService, { type InventoryItem } from "../../../services/EndOfTheWorldService";
-import { Button, getItemImg, Icon, LoadIcon, StatusBar } from "../../ui";
+import { Button, getItemImg, Icon, LoadIcon } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type Effect, type Item, type RarityColor } from "./types";
 import { InventorySystem, type InvGrid, type Personal } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
@@ -118,7 +118,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item, invento
   const [isVisibleSplitItemStackMenu, setIsVisibleSplitItemStackMenu] = useState<boolean>(false);
 
   return (
-    <div className="absolute w-[180px] h-[250px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-none opacity-95">
+    <div className="absolute w-[180px] h-[260px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-none opacity-95 p-1">
       <LoadAnimate atype="expansion" duration={1}>
         <div className="w-full h-[40px] flex justify-between p-3 border-b border-zinc-600">
           <span className="text-lg text-yellow-600">{item.item.name.length > 13 ? item.item.name.slice(0, 13) + "..." : item.item.name}</span>
@@ -128,12 +128,12 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item, invento
         </div>
 
         <ul className="w-full h-full mt-4">
-          <li className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center">Kullan</li>
+          <li className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 rounded-lg duration-300 flex flex-col justify-center">Kullan</li>
 
-          <li className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center">Sat</li>
+          <li className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 rounded-lg duration-300 flex flex-col justify-center">Sat</li>
 
           <li
-            className="relative w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center"
+            className="relative w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 rounded-lg duration-300 flex flex-col justify-center"
             onClick={() => setIsVisibleEffects(!isVisibleEffects)}
           >
             <div className="flex justify-between">
@@ -144,7 +144,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item, invento
           </li>
 
           <li
-            className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center"
+            className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 rounded-lg duration-300 flex flex-col justify-center"
             onClick={() => setIsVisibleSplitItemStackMenu(true)}
           >
             <div className="flex justify-between">
