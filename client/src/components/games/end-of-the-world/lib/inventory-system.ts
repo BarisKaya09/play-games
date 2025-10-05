@@ -8,10 +8,18 @@ export type InvGrid = {
   empty: boolean;
 };
 
+export type Personal = {
+  money: number;
+  hp: number;
+  hunger: number;
+  thirst: number;
+  energy: number;
+};
+
 export class InventorySystem {
   private invGrids: Array<InvGrid> = [];
   private user_id: string = ""; //? gerek olmayabilir
-  private money: number = 0;
+  private personal: Personal = {} as Personal;
 
   constructor(cachedInvGrids?: Array<InvGrid>) {
     if (cachedInvGrids) {
@@ -35,12 +43,13 @@ export class InventorySystem {
     return this.user_id;
   }
 
-  public setMoney(money: number) {
-    this.money = money;
+  public getPersonal(): Personal {
+    return this.personal;
   }
 
-  public getMoney(): number {
-    return this.money;
+  //TODO: İleride fieldı da set etme yap.
+  public setPersonal(personal: Personal) {
+    this.personal = personal;
   }
 
   public getInvGrids(): Array<InvGrid> {

@@ -12,6 +12,11 @@ export type Inventory = {
   user_id: string;
   items: Array<InventoryItem>;
   money: number;
+
+  hp: number;
+  hunger: number;
+  thirst: number;
+  energy: number;
 };
 
 export default class EndOfTheWorldService {

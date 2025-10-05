@@ -1,8 +1,12 @@
-import { MongoClient, type Collection, type Document, type UpdateFilter, type UpdateResult } from "mongodb";
+import { type Collection, type Document, type UpdateFilter, type UpdateResult } from "mongodb";
 import type { Item } from "./data/items";
 import { getMongoClient } from "../client";
 
-const BASE_MONEY = 500;
+const BASE_MONEY: number = 500;
+const BASE_HP: number = 100;
+const BASE_HUNGER: number = 100;
+const BASE_THIRST: number = 100;
+const BASE_ENERGY: number = 100;
 
 export type InventoryItem = {
   itemID: string;
@@ -14,6 +18,11 @@ export type Inventory = {
   user_id: string;
   items: Array<InventoryItem>;
   money: number;
+
+  hp: number;
+  hunger: number;
+  thirst: number;
+  energy: number;
 };
 
 export class InventoryRepository {
@@ -22,7 +31,13 @@ export class InventoryRepository {
       user_id: user_id,
       items: [],
       money: BASE_MONEY,
+
+      hp: BASE_HP,
+      hunger: BASE_HUNGER,
+      thirst: BASE_THIRST,
+      energy: BASE_ENERGY,
     };
+
     (await this.collection()).insertOne(inventory);
   }
 

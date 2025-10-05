@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import EndOfTheWorldService, { type InventoryItem } from "../../../services/EndOfTheWorldService";
 import { Button, getItemImg, Icon, LoadIcon, StatusBar } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type Effect, type Item, type RarityColor } from "./types";
-import { InventorySystem, type InvGrid } from "./lib/inventory-system";
+import { InventorySystem, type InvGrid, type Personal } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
-import { faCaretLeft, faCircleArrowLeft, faCrosshairs, faDroplet, faHeart, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faBolt, faCaretLeft, faCircleArrowLeft, faCoins, faCrosshairs, faDroplet, faHeart, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import LoadAnimate from "../../LoadAnimate";
 import type { ActiveScreen } from "./EndOfTheWorld";
 
@@ -177,7 +177,7 @@ type DropDownMenuULProps = {
   children: any;
 };
 const DropDownMenuUL: React.FC<DropDownMenuULProps> = ({ children }) => {
-  return <ul className="absolute left-48 w-full min-h-[50px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-none">{children}</ul>;
+  return <ul className="absolute left-48 w-full min-h-[50px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-none p-1">{children}</ul>;
 };
 
 type DropDownMenuLIProps = {
@@ -185,7 +185,7 @@ type DropDownMenuLIProps = {
 };
 const DropDownMenuLI: React.FC<DropDownMenuLIProps> = ({ children }) => {
   return (
-    <li className="w-full min-h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center my-1 rounded-lg">
+    <li className="w-full min-h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 duration-300 flex flex-col justify-center rounded-lg">
       {children}
     </li>
   );
@@ -300,26 +300,78 @@ const SplitItemStackMenu: React.FC<SplitItemStackMenuProps> = ({
   );
 };
 
-const Soldier: React.FC = () => {
+type SoldierProps = {
+  personal: Personal;
+};
+const Soldier: React.FC<SoldierProps> = ({ personal }) => {
   return (
     <div className="w-full h-full mt-10">
-      <div className="w-full h-[100px] grid grid-cols-1 gap-2">
-        <StatusBar width="400px" height="40px" color="emerald" status="89%">
-          <Icon _icon={faHeart} className="w-full h-full" />
-        </StatusBar>
-
-        <StatusBar width="400px" height="40px" color="orange" status="20%">
-          <Icon _icon={faUtensils} className="w-full h-full" />
-        </StatusBar>
-
-        <StatusBar width="400px" height="40px" color="blue" status="52%">
-          <Icon _icon={faDroplet} className="w-full h-full" />
-        </StatusBar>
+      <div className="w-full min-h-10 flex gap-2 border-2 border-zinc-700 rounded-md p-2 select-none">
+        <div className="w-[100px] text-xl">
+          <Icon _icon={faCoins} className="mr-2 text-amber-300" />
+          <span className="text-zinc-400">{personal.money}</span>
+        </div>
       </div>
 
-      <div className="w-full h-[500px] mt-22 border-2 border-zinc-700 rounded-md shadow-xl p-3 flex flex-wrap">
-        
+      <div className="w-full h-[100px] flex gap-2 mt-5 justify-center">
+        <Stat color="emerald" status={personal.hp}>
+          <Icon _icon={faHeart} className="text-xl" />
+        </Stat>
+
+        <Stat color="orange" status={personal.hunger}>
+          <Icon _icon={faUtensils} className="text-xl" />
+        </Stat>
+
+        <Stat color="blue" status={personal.thirst}>
+          <Icon _icon={faDroplet} className="text-xl" />
+        </Stat>
+
+        <Stat color="rose" status={personal.energy}>
+          <Icon _icon={faBolt} className="text-xl" />
+        </Stat>
       </div>
+
+      <div className="w-full h-[500px] mt-5 border-2 border-zinc-700 rounded-md shadow-xl p-3 flex flex-wrap"></div>
+    </div>
+  );
+};
+
+type StatProps = {
+  children: any;
+  color: "rose" | "emerald" | "orange" | "blue";
+  status: number;
+};
+const Stat: React.FC<StatProps> = ({ children, color, status }) => {
+  const border =
+    color == "emerald"
+      ? "border-2 border-emerald-600"
+      : color == "blue"
+      ? "border-2 border-blue-600"
+      : color == "rose"
+      ? "border-2 border-rose-600"
+      : color == "orange"
+      ? "border-2 border-amber-600"
+      : color == "lime"
+      ? "border-2 border-lime-600"
+      : "";
+
+  const bg =
+    color == "emerald"
+      ? "bg-emerald-600"
+      : color == "blue"
+      ? "bg-blue-600"
+      : color == "rose"
+      ? "bg-rose-600"
+      : color == "orange"
+      ? "bg-orange-600"
+      : color == "lime"
+      ? "bg-lime-600"
+      : "";
+
+  return (
+    <div className={`relative w-[100px] h-[100px] rounded-2xl border-2 ${border} flex justify-center items-center z-20`}>
+      {children}
+      <div className={`absolute -bottom-[2px] w-full rounded-2xl ${bg} -z-10`} style={{ height: status }}></div>
     </div>
   );
 };
@@ -338,7 +390,13 @@ const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen }) => {
       const data = await EndOfTheWorldService.getUserInventory();
       if (data.success) {
         inventorySystemRef.current.setUserID(data.data.user_id);
-        inventorySystemRef.current.setMoney(data.data.money);
+        inventorySystemRef.current.setPersonal({
+          money: data.data.money,
+          hp: data.data.hp,
+          hunger: data.data.hunger,
+          thirst: data.data.thirst,
+          energy: data.data.energy,
+        } as Personal);
 
         for (const [i, item] of data.data.items.entries()) {
           inventorySystemRef.current.placeItem(i, item);
@@ -372,7 +430,7 @@ const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen }) => {
       {isLoadedInventory && (
         <div className="w-full h-full flex gap-5 pl-5">
           <div className="w-1/3 h-full">
-            <Soldier />
+            <Soldier personal={inventorySystemRef.current.getPersonal()} />
           </div>
 
           <div className="w-2/3 h-full">

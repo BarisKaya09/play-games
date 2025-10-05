@@ -279,8 +279,9 @@ type StatusBarProps = {
   color: "emerald" | "blue" | "rose" | "orange" | "lime";
   status: string;
   children: any;
+  orientation: "horizontal" | "vertical";
 };
-export const StatusBar: React.FC<StatusBarProps> = ({ width, height, color, status, children }) => {
+export const StatusBar: React.FC<StatusBarProps> = ({ width, height, color, status, children, orientation }) => {
   const border =
     color == "emerald"
       ? "border-2 border-emerald-600"
@@ -309,8 +310,17 @@ export const StatusBar: React.FC<StatusBarProps> = ({ width, height, color, stat
 
   return (
     <div className={`relative rounded-md ${border}`} style={{ width: width, height: height }}>
-      <div className={`absolute h-[95%] ${bg} left-[1px] top-[1px] rounded-sm`} style={{ width: status }}></div>
-      <div className={`absolute left-1/2 top-1/5 w-5 h-5 text-cyan-200`}>{children}</div>
+      <div
+        className={`absolute w-full h-full ${bg} left-[1px] top-[1px] rounded-sm`}
+        style={orientation == "horizontal" ? { width: status } : { height: status }}
+      ></div>
+      <div
+        className={`absolute ${orientation == "horizontal" && "left-1/2 top-1/5 "} ${
+          orientation == "vertical" && "left-1/3 top-1/3"
+        } w-5 h-5 text-cyan-200`}
+      >
+        {children}
+      </div>
     </div>
   );
 };
