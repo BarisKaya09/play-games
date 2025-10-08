@@ -30,7 +30,7 @@ import { InventoryRepository, type InventoryItem } from "../repository/mongodb/e
 import { DailyMarketRepository } from "../repository/mongodb/end-of-the-world/daily-market";
 import { v4 as uuidV4 } from "uuid";
 import { MarketRepository } from "../repository/mongodb/end-of-the-world/market";
-import { ItemType } from "../repository/mongodb/end-of-the-world/data/items";
+import { applyFoodEffects, applyMedicalEffects, ItemType, type Food, type Medical } from "../repository/mongodb/end-of-the-world/data/items";
 import { allNorthArea, allSouthArea, allWestArea, type Area } from "../repository/mongodb/end-of-the-world/data/map";
 
 export const getUserInventory = async (req: express.Request, res: express.Response) => {
@@ -637,6 +637,87 @@ export const getMap = (req: express.Request, res: express.Response) => {
   }
 };
 
+//? use ıtems
+type UseItemBody = {
+  itemID: string;
+};
+export const useItem = async (req: express.Request, res: express.Response) => {
+  try {
+    const { itemID } = req.body as UseItemBody;
+    if (!itemID) {
+      res.status(MISSING_CONTENT.status).json(MISSING_CONTENT);
+      return;
+    }
+
+    const userRepo = new UserRepository();
+    const username = req.cookies.username as string;
+    const user = await userRepo.findUser({ username: username });
+    if (!user) {
+      res.status(USER_NOT_EXIST.status).json(USER_NOT_EXIST);
+      return;
+    }
+
+    const invRepo = new InventoryRepository();
+    const inv = await invRepo.findOneInventory({ user_id: user.id });
+    if (!inv) {
+      res.status(USER_INVENTORY_NOT_FOUND.status).json(USER_INVENTORY_NOT_FOUND);
+      return;
+    }
+
+    const usedItem = inv.items.find((item) => item.itemID == itemID);
+    if (!usedItem) {
+      res.status(ITEM_NOT_FOUND_IN_USER_INVENTORY.status).json(ITEM_NOT_FOUND_IN_USER_INVENTORY);
+      return;
+    }
+
+    switch (usedItem.item.itemType) {
+      case ItemType.Food:
+        const food = usedItem.item as Food;
+        applyFoodEffects(food, (effect, effectDirection, side) => {
+          if (effectDirection == "positive") inv[side] += inv[side] + effect > 100 ? 100 - inv[side] : effect;
+          else inv[side] -= inv[side] - effect < 0 ? inv[side] : effect;
+        });
+
+        if (food.stack == 1) {
+          inv.items = inv.items.filter((item) => item.itemID != itemID);
+        } else {
+          food.stack -= 1;
+        }
+
+        await invRepo.updateOneInventory(
+          { user_id: user.id },
+          { $set: { hp: inv.hp, hunger: inv.hunger, thirst: inv.thirst, energy: inv.energy, items: inv.items } }
+        );
+        res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Gıda tüketildi!" } as SuccessResponse);
+        break;
+      case ItemType.Clothes:
+      case ItemType.Weapon:
+      case ItemType.Bullet:
+      case ItemType.Medical:
+        const medical = usedItem.item as Medical;
+        applyMedicalEffects(medical, (effect) => {
+          inv.hp += inv.hp + effect > 100 ? 100 - inv.hp : effect;
+        });
+
+        if (medical.stack == 1) {
+          inv.items = inv.items.filter((item) => item.itemID != itemID);
+        } else {
+          medical.stack -= 1;
+        }
+
+        await invRepo.updateOneInventory({ user_id: user.id }, { $set: { hp: inv.hp, items: inv.items } });
+        res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Medikal müdahale yapıldı!" } as SuccessResponse);
+        break;
+
+      case ItemType.Container:
+      case ItemType.Valuable:
+    }
+    // res.status(StatusCode.OK).json({ status: StatusCode.OK, data: "Öge kullanıldı!" } as SuccessResponse);
+  } catch (err: any) {
+    res.status(ANY_ERROR.status).json(ANY_ERROR);
+  }
+};
+//? use ıtems
 //TODO: Eşyaları ayırma
 
 //TODO: Oyuncular arası trade (Ama bunun için websocet gerekecek).

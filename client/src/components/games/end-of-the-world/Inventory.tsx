@@ -117,6 +117,31 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item, invento
   const [isVisibleEffects, setIsVisibleEffects] = useState<boolean>(false);
   const [isVisibleSplitItemStackMenu, setIsVisibleSplitItemStackMenu] = useState<boolean>(false);
 
+  const useItem = async () => {
+    const data = await EndOfTheWorldService.useItem(item.itemID);
+    if (data.success) {
+      toast.success(data.data);
+      const inv = await EndOfTheWorldService.getUserInventory();
+      if (inv.success) {
+        for (const [i, item] of inv.data.items.entries()) {
+          inventorySystem.placeItem(i, item);
+        }
+
+        setInvGrids([...inventorySystem.getInvGrids()]);
+        inventorySystem.setPersonal({
+          money: inv.data.money,
+          hp: inv.data.hp,
+          hunger: inv.data.hunger,
+          thirst: inv.data.thirst,
+          energy: inv.data.energy,
+        } as Personal);
+        setIsVisibleItemMenu(false);
+      }
+    } else {
+      toast.error(data.error.message);
+    }
+  };
+
   return (
     <div className="absolute w-[180px] h-[260px] bg-zinc-700 z-50 rounded-lg shadow-2xl select-none opacity-95 p-1">
       <LoadAnimate atype="expansion" duration={1}>
@@ -128,9 +153,16 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item, invento
         </div>
 
         <ul className="w-full h-full mt-4">
-          <li className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 rounded-lg duration-300 flex flex-col justify-center">Kullan</li>
+          <li
+            className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 rounded-lg duration-300 flex flex-col justify-center"
+            onClick={useItem}
+          >
+            Kullan
+          </li>
 
-          <li className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 rounded-lg duration-300 flex flex-col justify-center">Sat</li>
+          <li className="w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 rounded-lg duration-300 flex flex-col justify-center">
+            Sat
+          </li>
 
           <li
             className="relative w-full h-12 px-2 cursor-pointer hover:bg-zinc-800 hover:text-gray-400 rounded-lg duration-300 flex flex-col justify-center"
@@ -138,7 +170,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ setIsVisibleItemMenu, item, invento
           >
             <div className="flex justify-between">
               Efektler
-              {isVisibleEffects && <Icon _icon={faCaretLeft} className="text-rose-300" />}
+              {isVisibleEffects && <Icon _icon={faCaretLeft} className="text-rose-300 mt-1" />}
             </div>
             {isVisibleEffects && <ItemEffectsFC item={item.item} />}
           </li>

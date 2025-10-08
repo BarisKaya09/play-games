@@ -13,6 +13,7 @@ import {
   sellItemInMarket,
   splitItemStack,
   stacKTheItemInInventory,
+  useItem,
 } from "../controllers/end-of-the-world";
 
 const router = express.Router();
@@ -28,6 +29,7 @@ router.post("/stacKTheItemInInventory", requireAuth, stacKTheItemInInventory);
 router.post("/splitItemStack", requireAuth, splitItemStack);
 router.post("/concatItems", requireAuth, concatItems);
 router.get("/getMap", requireAuth, getMap);
+router.post("/useItem", requireAuth, useItem);
 
 // dev. routes
 router.get("/getItemInDailyMarketByName/:itemName", requireAuth, getItemInDailyMarketByName);

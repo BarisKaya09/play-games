@@ -32,6 +32,40 @@ enum FoodEffects {
   CureIllness = "CureIllness",
 }
 
+export const applyFoodEffects = (
+  food: Food,
+  apply: (effect: number, effectDirection: "positive" | "negative", side: "hp" | "hunger" | "thirst" | "energy") => void
+) => {
+  for (const effect of food.effects) {
+    switch (effect.foodEffect) {
+      case FoodEffects.IncreaseThirst:
+        apply(effectToInt(effect.effect), "negative", "thirst");
+        break;
+      case FoodEffects.ReduceThirst:
+        apply(effectToInt(effect.effect), "positive", "thirst");
+        break;
+      case FoodEffects.IncreaseHunger:
+        apply(effectToInt(effect.effect), "negative", "hunger");
+        break;
+      case FoodEffects.ReduceHunger:
+        apply(effectToInt(effect.effect), "positive", "hunger");
+        break;
+      case FoodEffects.IncreaseEnergy:
+        apply(effectToInt(effect.effect), "positive", "energy");
+        break;
+      case FoodEffects.ReduceEnergy:
+        apply(effectToInt(effect.effect), "negative", "energy");
+        break;
+      case FoodEffects.CauseIllness:
+        apply(effectToInt(effect.effect), "negative", "hp");
+        break;
+      case FoodEffects.CureIllness:
+        apply(effectToInt(effect.effect), "positive", "hp");
+        break;
+    }
+  }
+};
+
 const getItemValue = (rarity: Rarity): number => {
   switch (rarity) {
     case Rarity.Common:
@@ -50,6 +84,9 @@ const getItemValue = (rarity: Rarity): number => {
 };
 
 type Effect = "very-low" | "low" | "medium" | "high" | "very-high";
+const effectToInt = (effect: Effect): number =>
+  effect == "very-low" ? 20 : effect == "low" ? 30 : effect == "medium" ? 40 : effect == "high" ? 50 : 60;
+
 export type FoodEffect = {
   foodEffect: FoodEffects;
   description: string;
@@ -82,7 +119,7 @@ const IncreaseHunger = (effect: Effect): FoodEffect => {
 
 const ReduceHunger = (effect: Effect): FoodEffect => {
   return {
-    foodEffect: FoodEffects.IncreaseHunger,
+    foodEffect: FoodEffects.ReduceHunger,
     description: "Açlığı azaltır (iyi etki)",
     effect,
   } as FoodEffect;
@@ -282,6 +319,22 @@ enum MedicalEffects {
   PainRelief = "PainRelief",
   CureInfection = "CureInfection",
 }
+
+export const applyMedicalEffects = (medical: Medical, apply: (effect: number) => void) => {
+  for (const effect of medical.effects) {
+    switch (effect.medicalEffect) {
+      case MedicalEffects.Heal:
+        apply(effectToInt(effect.effect));
+        break;
+      case MedicalEffects.PainRelief:
+        apply(effectToInt(effect.effect));
+        break;
+      case MedicalEffects.CureInfection:
+        apply(effectToInt(effect.effect));
+        break;
+    }
+  }
+};
 
 type MedicalEffect = {
   medicalEffect: MedicalEffects;

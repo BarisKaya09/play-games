@@ -36,6 +36,9 @@ import BarrettM82 from "../assets/barrett-M82.png";
 import LouisvilleSlugger from "../assets/louisville-slugger.png";
 import StanleyCrowbar from "../assets/stanley-crowbar.png";
 import Backpack from "../assets/backpack.png";
+import Bandage from "../assets/bandage.png";
+import Medkit from "../assets/medkit.png";
+import AntibioticPills from "../assets/antibiotic-pills.png";
 
 export const getItemImg = (itemName: string): string => {
   switch (itemName) {
@@ -127,10 +130,13 @@ export const getItemImg = (itemName: string): string => {
     case ItemNames.LuxuryWatch:
     case ItemNames.OldPainting:
     case ItemNames.Bandage:
+      return Bandage;
     case ItemNames.Medkit:
+      return Medkit;
     case ItemNames.Painkiller:
       return Painkiller;
     case ItemNames.AntibioticPills:
+      return AntibioticPills;
     default:
       return "";
   }
