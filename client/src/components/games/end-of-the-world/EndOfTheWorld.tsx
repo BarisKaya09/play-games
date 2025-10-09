@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MenuButton } from "./ui";
 import Play from "./Play";
 import Market from "./Market";
-import DailyMarket from "./DailyMarket";
+import DailyMarketC from "./DailyMarket";
 import InventoryC from "./Inventory";
 import Settings from "./Settings";
 import EndOfTheWorldBanner from "../../../assets/end-of-the-world.png";
@@ -53,7 +53,7 @@ const EndOfTheWorld: React.FC = () => {
 
       {activeScreen == "play" && <Play />}
       {activeScreen == "market" && <Market />}
-      {activeScreen == "daily-market" && <DailyMarket />}
+      {activeScreen == "daily-market" && <DailyMarketC setActiveScreen={setActiveScreen} />}
       {activeScreen == "inventory" && <InventoryC setActiveScreen={setActiveScreen} />}
       {activeScreen == "settings" && <Settings />}
     </div>

@@ -142,11 +142,21 @@ export const getItemImg = (itemName: string): string => {
   }
 };
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { ItemNames } from "./games/end-of-the-world/types";
+import { faCircleArrowLeft, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  CommonColor,
+  EpicColor,
+  ItemNames,
+  LegendaryColor,
+  RareColor,
+  Rarity,
+  UncommonColor,
+  type RarityColor,
+} from "./games/end-of-the-world/types";
+import type { ActiveScreen } from "./games/end-of-the-world/EndOfTheWorld";
 
 type InputProps = {
   type: React.HTMLInputTypeAttribute;
@@ -327,6 +337,90 @@ export const StatusBar: React.FC<StatusBarProps> = ({ width, height, color, stat
       >
         {children}
       </div>
+    </div>
+  );
+};
+
+type BackMenuProps = {
+  setActiveScreen: React.Dispatch<React.SetStateAction<ActiveScreen>>;
+};
+export const BackMenu: React.FC<BackMenuProps> = ({ setActiveScreen }) => {
+  return (
+    <div className="w-full h-[5%] p-10">
+      <div className="w-[10%] h-full text-lg hover:text-rose-300 select-none cursor-pointer" onClick={() => setActiveScreen("menu")}>
+        <Icon _icon={faCircleArrowLeft} />
+        <span className="ml-2">Menüye Dön</span>
+      </div>
+    </div>
+  );
+};
+
+type GridProps = {
+  rarity?: Rarity;
+  children: any;
+  draggable?: boolean;
+  onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
+};
+export const Grid: React.FC<GridProps> = ({ rarity, children, draggable, onDragStart, onDrop, onDragOver, onDoubleClick }) => {
+  const rareColor: RarityColor =
+    rarity == Rarity.Common
+      ? CommonColor
+      : rarity == Rarity.Uncommon
+      ? UncommonColor
+      : rarity == Rarity.Rare
+      ? RareColor
+      : rarity == Rarity.Epic
+      ? EpicColor
+      : rarity == Rarity.Legendary
+      ? LegendaryColor
+      : CommonColor;
+
+  return (
+    <div
+      className={`relative w-[140px] h-[120px] bg-zinc-900 border-3 border-zinc-700 ${rareColor} border-none rounded-lg text-sm select-none z-10 hover:border-5 duration-100`}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+      onDoubleClick={onDoubleClick}
+    >
+      {children}
+    </div>
+  );
+};
+
+type CustomSelectProps = {
+  width: string;
+  height: string;
+  options: Array<string>;
+  text: string;
+  selectOption: (option: string) => void;
+};
+export const CustomSelect: React.FC<CustomSelectProps> = ({ width, height, options, text, selectOption }) => {
+  const [isVisibleOption, setIsVisibleOption] = useState<boolean>(false);
+
+  return (
+    <div
+      className="relative border-2 border-zinc-700 rounded-md hover:bg-zinc-700 cursor-pointer duration-300 text-center p-1 flex flex-col justify-center select-none"
+      style={{ width: width, height: height }}
+      onClick={() => setIsVisibleOption(!isVisibleOption)}
+    >
+      <div>{text}</div>
+      {isVisibleOption && (
+        <div className="absolute min-h-10 top-16 bg-zinc-700 z-50 opacity-90 p-1 rounded-lg" style={{ width: width }}>
+          {options.map((option) => (
+            <div
+              className="w-full h-12 cursor-pointer hover:bg-zinc-800 duration-300 flex flex-col justify-center text-left rounded-lg pl-2"
+              onClick={() => selectOption(option)}
+            >
+              {option}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

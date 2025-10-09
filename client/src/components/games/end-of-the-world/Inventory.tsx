@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import EndOfTheWorldService, { type InventoryItem } from "../../../services/EndOfTheWorldService";
-import { Button, getItemImg, Icon, LoadIcon } from "../../ui";
+import { BackMenu, Button, getItemImg, Grid, Icon, LoadIcon } from "../../ui";
 import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type Effect, type Item, type RarityColor } from "./types";
 import { InventorySystem, type InvGrid, type Personal } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
@@ -14,19 +14,6 @@ type InventoryGridProps = {
   setInvGrids: React.Dispatch<React.SetStateAction<Array<InvGrid>>>;
 };
 const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, setInvGrids }) => {
-  const rareColor: RarityColor =
-    item.inventoryItem?.item.rarity == Rarity.Common
-      ? CommonColor
-      : item.inventoryItem?.item.rarity == Rarity.Uncommon
-      ? UncommonColor
-      : item.inventoryItem?.item.rarity == Rarity.Rare
-      ? RareColor
-      : item.inventoryItem?.item.rarity == Rarity.Epic
-      ? EpicColor
-      : item.inventoryItem?.item.rarity == Rarity.Legendary
-      ? LegendaryColor
-      : CommonColor;
-
   const [isVisibleItemMenu, setIsVisibleItemMenu] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -87,8 +74,8 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
         <ItemMenu setIsVisibleItemMenu={setIsVisibleItemMenu} item={item.inventoryItem} inventorySystem={inventorySystem} setInvGrids={setInvGrids} />
       )}
 
-      <div
-        className={`relative w-[140px] h-[120px] bg-zinc-900 border-3 border-zinc-700 ${rareColor} border-none rounded-lg text-sm select-none z-10 hover:border-5 duration-100`}
+      <Grid
+        rarity={item.inventoryItem?.item.rarity}
         draggable={!item.empty && true}
         onDragStart={dragItem}
         onDrop={dropItem}
@@ -102,7 +89,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
           <span>{item.inventoryItem?.item.name}</span>
           {!item.empty && <img src={getItemImg(item.inventoryItem?.item.name || "")} className="w-[160px] h-[110px] select-none m-auto -z-10" />}
         </div>
-      </div>
+      </Grid>
     </div>
   );
 };
@@ -444,14 +431,7 @@ const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen }) => {
 
   return (
     <div className="w-full h-full">
-      {isLoadedInventory && (
-        <div className="w-full h-[5%] p-10">
-          <div className="w-[10%] h-full text-lg hover:text-rose-300 select-none cursor-pointer" onClick={() => setActiveScreen("menu")}>
-            <Icon _icon={faCircleArrowLeft} />
-            <span className="ml-2">Menüye Dön</span>
-          </div>
-        </div>
-      )}
+      {isLoadedInventory && <BackMenu setActiveScreen={setActiveScreen} />}
 
       {!isLoadedInventory && (
         <div className="absolute w-full h-full flex flex-col justify-center">
@@ -466,7 +446,7 @@ const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen }) => {
           </div>
 
           <div className="w-2/3 h-full">
-            <div className="relative w-full h-[90%] p-10 flex flex-wrap gap-12 overflow-y-auto scroll-smooth">
+            <div className="relative w-full max-h-[90%] p-10 grid grid-cols-6 auto-rows-max gap-8 overflow-y-auto scroll-smooth">
               {invGrids.map((item) => (
                 <div className="w-[100px] h-[100px]">
                   <InventoryGrid key={item.index} item={item} inventorySystem={inventorySystemRef.current} setInvGrids={setInvGrids} />

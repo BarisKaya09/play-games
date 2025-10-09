@@ -259,3 +259,8 @@ export enum ItemNames {
   Painkiller = "Ağrı Kesici",
   AntibioticPills = "Antibiyotik Haplar",
 }
+
+export enum ValueType {
+  Up = "Yükselen",
+  Down = "Azalan",
+}

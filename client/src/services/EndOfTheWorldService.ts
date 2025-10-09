@@ -19,6 +19,18 @@ export type Inventory = {
   energy: number;
 };
 
+export type DailyMarketItem = {
+  id: string;
+  item: Item;
+  value: number;
+  stock: number;
+};
+
+export type DailyMarket = {
+  id: string;
+  items: Array<DailyMarketItem>;
+};
+
 export default class EndOfTheWorldService {
   private static readonly GET_USER_INVENTORY_ENDPOINT: string = import.meta.env.VITE_GET_USER_INVENTORY_ENDPOINT as string;
   private static readonly SPLIT_ITEM_STACK_ENDPOINT: string = import.meta.env.VITE_SPLIT_ITEM_STACK_ENDPOINT as string;
@@ -64,6 +76,15 @@ export default class EndOfTheWorldService {
     try {
       const { data } = await axios.post<SuccessResponse<string>>(this.USE_ITEM_ENDPOINT, { itemID }, { withCredentials: true });
       return response.success(data.status, data.data);
+    } catch (err: any) {
+      return response.unsuccess(err.response.data.status, err.response.data.error);
+    }
+  }
+
+  public static async getDailyMarket(): Promise<SuccessResponse<DailyMarket> | UnsuccessResponse> {
+    try {
+      const { data } = await axios.get<SuccessResponse<DailyMarket>>(this.GET_DAILY_MARKET_ENDPOINT, { withCredentials: true });
+      return response.success<DailyMarket>(data.status, data.data);
     } catch (err: any) {
       return response.unsuccess(err.response.data.status, err.response.data.error);
     }
