@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MenuButton } from "./ui";
 import Play from "./Play";
 import Market from "./Market";
@@ -6,6 +6,9 @@ import DailyMarketC from "./DailyMarket";
 import InventoryC from "./Inventory";
 import Settings from "./Settings";
 import EndOfTheWorldBanner from "../../../assets/end-of-the-world.png";
+import { InventorySystem, type Personal } from "./lib/inventory-system";
+import EndOfTheWorldService from "../../../services/EndOfTheWorldService";
+import { toast, ToastContainer } from "react-toastify";
 
 type MenuProps = {
   activeScreen: ActiveScreen;
@@ -40,6 +43,30 @@ export type ActiveScreen = "menu" | "play" | "market" | "daily-market" | "invent
 
 const EndOfTheWorld: React.FC = () => {
   const [activeScreen, setActiveScreen] = useState<ActiveScreen>("menu");
+  const inventorySystemRef = useRef(new InventorySystem());
+
+  useEffect(() => {
+    (async () => {
+      const data = await EndOfTheWorldService.getUserInventory();
+      if (data.success) {
+        inventorySystemRef.current.setUserID(data.data.user_id);
+        inventorySystemRef.current.setPersonal({
+          money: data.data.money,
+          hp: data.data.hp,
+          hunger: data.data.hunger,
+          thirst: data.data.thirst,
+          energy: data.data.energy,
+        } as Personal);
+
+        for (const [i, item] of data.data.items.entries()) {
+          inventorySystemRef.current.placeItem(i, item);
+        }
+      } else {
+        toast.error(data.error.message);
+        throw data;
+      }
+    })();
+  }, []);
 
   return (
     <div className={`relative w-[99%] h-[850px] border-2 border-orange-900 rounded-md ${activeScreen != "menu" && "bg-zinc-900"} overflow-hidden`}>
@@ -53,9 +80,11 @@ const EndOfTheWorld: React.FC = () => {
 
       {activeScreen == "play" && <Play />}
       {activeScreen == "market" && <Market />}
-      {activeScreen == "daily-market" && <DailyMarketC setActiveScreen={setActiveScreen} />}
-      {activeScreen == "inventory" && <InventoryC setActiveScreen={setActiveScreen} />}
+      {activeScreen == "daily-market" && <DailyMarketC setActiveScreen={setActiveScreen} inventorySystem={inventorySystemRef.current} />}
+      {activeScreen == "inventory" && <InventoryC setActiveScreen={setActiveScreen} inventorySystem={inventorySystemRef.current} />}
       {activeScreen == "settings" && <Settings />}
+
+      <ToastContainer />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { allItems, Rarity, type Item } from "./data/items";
 import { v4 as uuidV4 } from "uuid";
 import { getMongoClient } from "../client";
 
-const MAX_DAILY_MARKET_ITEM = 100;
+const MAX_DAILY_MARKET_ITEM = 500;
 
 type DailyMarketItem = {
   id: string;

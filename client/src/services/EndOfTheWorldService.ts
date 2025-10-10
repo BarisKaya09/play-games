@@ -89,4 +89,17 @@ export default class EndOfTheWorldService {
       return response.unsuccess(err.response.data.status, err.response.data.error);
     }
   }
+
+  public static async buyItemInDailyMarket(itemID: string, amount: number): Promise<SuccessResponse<string> | UnsuccessResponse> {
+    try {
+      const { data } = await axios.post<SuccessResponse<string>>(
+        this.BUY_ITEM_IN_DAILY_MARKET_ENDPOINT,
+        { itemID, amount },
+        { withCredentials: true }
+      );
+      return response.success(data.status, data.data);
+    } catch (err: any) {
+      return response.unsuccess(err.response.data.status, err.response.data.error);
+    }
+  }
 }

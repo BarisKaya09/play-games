@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import EndOfTheWorldService, { type InventoryItem } from "../../../services/EndOfTheWorldService";
-import { BackMenu, Button, getItemImg, Grid, Icon, LoadIcon } from "../../ui";
-import { CommonColor, EpicColor, LegendaryColor, RareColor, Rarity, UncommonColor, type Effect, type Item, type RarityColor } from "./types";
+import { BackMenu, Button, getItemImg, Grid, Icon } from "../../ui";
+import { type Effect, type Item } from "./types";
 import { InventorySystem, type InvGrid, type Personal } from "./lib/inventory-system";
 import { toast, ToastContainer } from "react-toastify";
-import { faBolt, faCaretLeft, faCircleArrowLeft, faCoins, faCrosshairs, faDroplet, faHeart, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faBolt, faCaretLeft, faCoins, faCrosshairs, faDroplet, faHeart, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import LoadAnimate from "../../LoadAnimate";
 import type { ActiveScreen } from "./EndOfTheWorld";
 
@@ -15,12 +15,10 @@ type InventoryGridProps = {
 };
 const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, setInvGrids }) => {
   const [isVisibleItemMenu, setIsVisibleItemMenu] = useState<boolean>(false);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const dragItem = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("item", JSON.stringify(item));
-    setIsDragging(true);
   };
 
   const dropItem = async (e: React.DragEvent<HTMLDivElement>) => {
@@ -54,13 +52,11 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
       inventorySystem.chnageItemPlace(data, item);
     }
     setInvGrids([...inventorySystem.getInvGrids()]);
-    setIsDragging(false);
   };
 
   const allowDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.effectAllowed = "move";
     e.preventDefault();
-    setIsDragging(false);
   };
 
   const getItemStack = (): number => {
@@ -397,67 +393,32 @@ const Stat: React.FC<StatProps> = ({ children, color, status }) => {
 
 type InventoryCProps = {
   setActiveScreen: React.Dispatch<React.SetStateAction<ActiveScreen>>;
+  inventorySystem: InventorySystem;
 };
-const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen }) => {
-  const inventorySystemRef = useRef(new InventorySystem());
-  const [invGrids, setInvGrids] = useState<Array<InvGrid>>(inventorySystemRef.current.getInvGrids());
-
-  const [isLoadedInventory, setIsLoadedInventory] = useState<boolean>(false);
-
-  useEffect(() => {
-    (async () => {
-      const data = await EndOfTheWorldService.getUserInventory();
-      if (data.success) {
-        inventorySystemRef.current.setUserID(data.data.user_id);
-        inventorySystemRef.current.setPersonal({
-          money: data.data.money,
-          hp: data.data.hp,
-          hunger: data.data.hunger,
-          thirst: data.data.thirst,
-          energy: data.data.energy,
-        } as Personal);
-
-        for (const [i, item] of data.data.items.entries()) {
-          inventorySystemRef.current.placeItem(i, item);
-        }
-
-        setIsLoadedInventory(true);
-      } else {
-        toast.error(data.error.message);
-        throw data;
-      }
-    })();
-  }, []);
+const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen, inventorySystem }) => {
+  const [invGrids, setInvGrids] = useState<Array<InvGrid>>(inventorySystem.getInvGrids());
 
   return (
     <div className="w-full h-full">
-      {isLoadedInventory && <BackMenu setActiveScreen={setActiveScreen} />}
+      <BackMenu setActiveScreen={setActiveScreen} />
 
-      {!isLoadedInventory && (
-        <div className="absolute w-full h-full flex flex-col justify-center">
-          <LoadIcon />
+      <div className="w-full h-full flex gap-5 pl-5">
+        <div className="w-1/3 h-full">
+          <Soldier personal={inventorySystem.getPersonal()} />
         </div>
-      )}
 
-      {isLoadedInventory && (
-        <div className="w-full h-full flex gap-5 pl-5">
-          <div className="w-1/3 h-full">
-            <Soldier personal={inventorySystemRef.current.getPersonal()} />
+        <div className="w-2/3 h-full">
+          <div className="relative w-full max-h-[90%] p-10 grid grid-cols-6 auto-rows-max gap-8 overflow-y-auto scroll-smooth">
+            {invGrids.map((item) => (
+              <div className="w-[100px] h-[100px]">
+                <InventoryGrid key={item.index} item={item} inventorySystem={inventorySystem} setInvGrids={setInvGrids} />
+              </div>
+            ))}
           </div>
-
-          <div className="w-2/3 h-full">
-            <div className="relative w-full max-h-[90%] p-10 grid grid-cols-6 auto-rows-max gap-8 overflow-y-auto scroll-smooth">
-              {invGrids.map((item) => (
-                <div className="w-[100px] h-[100px]">
-                  <InventoryGrid key={item.index} item={item} inventorySystem={inventorySystemRef.current} setInvGrids={setInvGrids} />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <ToastContainer />
         </div>
-      )}
+
+        <ToastContainer />
+      </div>
     </div>
   );
 };

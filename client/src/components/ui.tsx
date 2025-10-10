@@ -39,6 +39,18 @@ import Backpack from "../assets/backpack.png";
 import Bandage from "../assets/bandage.png";
 import Medkit from "../assets/medkit.png";
 import AntibioticPills from "../assets/antibiotic-pills.png";
+import PistolBullet from "../assets/pistol-bullet.png";
+import RifleBullet from "../assets/rifle-bullet.png";
+import SniperBullet from "../assets/sniper-bullet.png";
+import PumpgunBullet from "../assets/pumpgun-bullet.png";
+import GoldRing from "../assets/gold-ring.png";
+import SilverNecklace from "../assets/silver-necklace.png";
+import DiamondEarring from "../assets/diamond-earring.png";
+import LuxuryWatch from "../assets/luxury-watch.png";
+import OldPainting from "../assets/old-painting.png";
+import BigContainer from "../assets/big-container.png";
+import KaBarKnife from "../assets/kaBar-knife.png";
+import Whitefish from "../assets/white-fish.png";
 
 export const getItemImg = (itemName: string): string => {
   switch (itemName) {
@@ -65,6 +77,7 @@ export const getItemImg = (itemName: string): string => {
     case ItemNames.NorthernPike:
       return NorthernPike;
     case ItemNames.Whitefish:
+      return Whitefish;
     case ItemNames.IceSalmon:
       return IceSalmon;
     case ItemNames.CrystalCarp:
@@ -95,7 +108,7 @@ export const getItemImg = (itemName: string): string => {
       return LightMilitaryHelmet;
     case ItemNames.HeavyMilitaryHelmet:
       return HeavyMilitaryHelmet;
-    case ItemNames.Glock18: // *
+    case ItemNames.Glock18:
       return Glock18;
     case ItemNames.Colt1911:
       return Colt1911;
@@ -108,9 +121,9 @@ export const getItemImg = (itemName: string): string => {
     case ItemNames.BarrettM82:
       return BarrettM82;
     case ItemNames.KaBarKnife:
+      return KaBarKnife;
     case ItemNames.Machete:
       return Machete;
-
     case ItemNames.LouisvilleSlugger:
       return LouisvilleSlugger;
     case ItemNames.StanleyCrowbar:
@@ -120,15 +133,25 @@ export const getItemImg = (itemName: string): string => {
     case ItemNames.SmallContainer:
       return SmallContainerPng;
     case ItemNames.BigContainer:
+      return BigContainer;
     case ItemNames.PistolBullet:
+      return PistolBullet;
     case ItemNames.RifleBullet:
+      return RifleBullet;
     case ItemNames.SniperBullet:
+      return SniperBullet;
     case ItemNames.PumpgunBullet:
+      return PumpgunBullet;
     case ItemNames.GoldRing:
+      return GoldRing;
     case ItemNames.SilverNecklace:
+      return SilverNecklace;
     case ItemNames.DiamondEarring:
+      return DiamondEarring;
     case ItemNames.LuxuryWatch:
+      return LuxuryWatch;
     case ItemNames.OldPainting:
+      return OldPainting;
     case ItemNames.Bandage:
       return Bandage;
     case ItemNames.Medkit:

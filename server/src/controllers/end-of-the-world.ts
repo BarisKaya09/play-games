@@ -129,7 +129,7 @@ export const buyItemInDailyMarket = async (req: express.Request, res: express.Re
       return;
     }
 
-    await userInventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { money: userInventory.money - buyingItem.value } });
+    await userInventoryRepo.updateOneInventory({ user_id: user.id }, { $set: { money: userInventory.money - buyingItem.value * amount } });
 
     if ("stackable" in buyingItem.item && buyingItem.item.stackable) {
       buyingItem.item.stack += amount;
