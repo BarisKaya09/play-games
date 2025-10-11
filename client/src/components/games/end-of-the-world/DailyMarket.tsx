@@ -6,7 +6,7 @@ import EndOfTheWorldService from "../../../services/EndOfTheWorldService";
 import { toast, ToastContainer } from "react-toastify";
 import { faCircleXmark, faCoins, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { ItemType, Rarity, ValueType } from "./types";
-import { InventorySystem, type InvGrid, type Personal } from "./lib/inventory-system";
+import { InventorySystem, type Personal } from "./lib/inventory-system";
 
 type BuyItemProps = {
   item: DailyMarketItem;

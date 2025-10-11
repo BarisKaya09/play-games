@@ -392,9 +392,10 @@ const Stat: React.FC<StatProps> = ({ children, color, status }) => {
       : "";
 
   return (
-    <div className={`relative w-[100px] h-[100px] rounded-2xl border-2 ${border} flex justify-center items-center z-20`}>
+    <div className={`relative w-[100px] h-[100px] rounded-full border-2 ${border} flex justify-center items-center z-20 shadow-xl select-none`}>
       {children}
-      <div className={`absolute -bottom-[2px] w-full rounded-2xl ${bg} -z-10`} style={{ height: status }}></div>
+      <div className={`absolute -bottom-[2px] w-full rounded-full ${bg} -z-10`} style={{ height: status }}></div>
+      <div className="absolute -bottom-2 w-12 h-5 rounded-xl text-sm px-2 bg-zinc-800 text-center">{status}%</div>
     </div>
   );
 };
