@@ -678,7 +678,7 @@ export const useItem = async (req: express.Request, res: express.Response) => {
           else inv[side] -= inv[side] - effect < 0 ? inv[side] : effect;
         });
 
-        if (food.stack == 1) {
+        if (!food.stackable || food.stack == 1) {
           inv.items = inv.items.filter((item) => item.itemID != itemID);
         } else {
           food.stack -= 1;
@@ -699,7 +699,7 @@ export const useItem = async (req: express.Request, res: express.Response) => {
           inv.hp += inv.hp + effect > 100 ? 100 - inv.hp : effect;
         });
 
-        if (medical.stack == 1) {
+        if (!medical.stackable || medical.stack == 1) {
           inv.items = inv.items.filter((item) => item.itemID != itemID);
         } else {
           medical.stack -= 1;
