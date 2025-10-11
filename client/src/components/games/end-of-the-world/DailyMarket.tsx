@@ -6,7 +6,7 @@ import EndOfTheWorldService from "../../../services/EndOfTheWorldService";
 import { toast, ToastContainer } from "react-toastify";
 import { faCircleXmark, faCoins, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { ItemType, Rarity, ValueType } from "./types";
-import { InventorySystem, type Personal } from "./lib/inventory-system";
+import { InventorySystem, type InvGrid, type Personal } from "./lib/inventory-system";
 
 type BuyItemProps = {
   item: DailyMarketItem;
@@ -14,8 +14,16 @@ type BuyItemProps = {
   setCachedDailyMarket: React.Dispatch<React.SetStateAction<DailyMarket>>;
   setDailyMarket: React.Dispatch<React.SetStateAction<DailyMarket>>;
   inventorySystem: InventorySystem;
+  setInventoryUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 };
-const BuyItemMenu: React.FC<BuyItemProps> = ({ item, setIsVisibleBuyItemMenu, setCachedDailyMarket, setDailyMarket, inventorySystem }) => {
+const BuyItemMenu: React.FC<BuyItemProps> = ({
+  item,
+  setIsVisibleBuyItemMenu,
+  setCachedDailyMarket,
+  setDailyMarket,
+  inventorySystem,
+  setInventoryUpdated,
+}) => {
   const [amount, setAmount] = useState<number>(1);
   const [itemBuying, setItemBuying] = useState<boolean>(false);
 
@@ -34,6 +42,11 @@ const BuyItemMenu: React.FC<BuyItemProps> = ({ item, setIsVisibleBuyItemMenu, se
 
       const userInv = await EndOfTheWorldService.getUserInventory();
       if (userInv.success) {
+        for (const [i, item] of userInv.data.items.entries()) {
+          inventorySystem.placeItem(i, item);
+        }
+        setInventoryUpdated((prev) => !prev);
+
         inventorySystem.setPersonal({
           money: userInv.data.money,
           hp: userInv.data.hp,
@@ -88,8 +101,9 @@ type DailyMarketGridProps = {
   setCachedDailyMarket: React.Dispatch<React.SetStateAction<DailyMarket>>;
   setDailyMarket: React.Dispatch<React.SetStateAction<DailyMarket>>;
   inventorySystem: InventorySystem;
+  setInventoryUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 };
-const DailymarketGrid: React.FC<DailyMarketGridProps> = ({ item, setCachedDailyMarket, setDailyMarket, inventorySystem }) => {
+const DailymarketGrid: React.FC<DailyMarketGridProps> = ({ item, setCachedDailyMarket, setDailyMarket, inventorySystem, setInventoryUpdated }) => {
   const [isVisibleBuyItemMenu, setIsVisibleBuyItemMenu] = useState<boolean>(false);
 
   return (
@@ -101,6 +115,7 @@ const DailymarketGrid: React.FC<DailyMarketGridProps> = ({ item, setCachedDailyM
           setIsVisibleBuyItemMenu={setIsVisibleBuyItemMenu}
           setCachedDailyMarket={setCachedDailyMarket}
           setDailyMarket={setDailyMarket}
+          setInventoryUpdated={setInventoryUpdated}
         />
       )}
       <Grid rarity={item.item.rarity} onDoubleClick={() => setIsVisibleBuyItemMenu(true)}>
@@ -124,8 +139,9 @@ const DailymarketGrid: React.FC<DailyMarketGridProps> = ({ item, setCachedDailyM
 type DailMarketProps = {
   setActiveScreen: React.Dispatch<React.SetStateAction<ActiveScreen>>;
   inventorySystem: InventorySystem;
+  setInventoryUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 };
-const DailyMarketC: React.FC<DailMarketProps> = ({ setActiveScreen, inventorySystem }) => {
+const DailyMarketC: React.FC<DailMarketProps> = ({ setActiveScreen, inventorySystem, setInventoryUpdated }) => {
   const [dailyMarket, setDailyMarket] = useState<DailyMarket>({} as DailyMarket);
   const [cachedDailyMarket, setCachedDailyMarket] = useState<DailyMarket>({} as DailyMarket);
   const [filtered, setFiltered] = useState<boolean>(false);
@@ -248,6 +264,7 @@ const DailyMarketC: React.FC<DailMarketProps> = ({ setActiveScreen, inventorySys
               setCachedDailyMarket={setCachedDailyMarket}
               setDailyMarket={setDailyMarket}
               inventorySystem={inventorySystem}
+              setInventoryUpdated={setInventoryUpdated}
             />
           ))}
         </div>

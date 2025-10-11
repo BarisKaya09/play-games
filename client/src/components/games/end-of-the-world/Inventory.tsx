@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EndOfTheWorldService, { type InventoryItem } from "../../../services/EndOfTheWorldService";
 import { BackMenu, Button, getItemImg, Grid, Icon } from "../../ui";
 import { type Effect, type Item } from "./types";
@@ -402,9 +402,14 @@ const Stat: React.FC<StatProps> = ({ children, color, status }) => {
 type InventoryCProps = {
   setActiveScreen: React.Dispatch<React.SetStateAction<ActiveScreen>>;
   inventorySystem: InventorySystem;
+  inventoryUpdated: boolean;
 };
-const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen, inventorySystem }) => {
+const InventoryC: React.FC<InventoryCProps> = ({ setActiveScreen, inventorySystem, inventoryUpdated }) => {
   const [invGrids, setInvGrids] = useState<Array<InvGrid>>(inventorySystem.getInvGrids());
+
+  useEffect(() => {
+    setInvGrids([...inventorySystem.getInvGrids()]);
+  }, [inventoryUpdated]);
 
   return (
     <div className="w-full h-full">

@@ -43,6 +43,7 @@ export type ActiveScreen = "menu" | "play" | "market" | "daily-market" | "invent
 
 const EndOfTheWorld: React.FC = () => {
   const [activeScreen, setActiveScreen] = useState<ActiveScreen>("menu");
+  const [inventoryUpdated, setInventoryUpdated] = useState<boolean>(false);
   const inventorySystemRef = useRef(new InventorySystem());
 
   useEffect(() => {
@@ -80,8 +81,12 @@ const EndOfTheWorld: React.FC = () => {
 
       {activeScreen == "play" && <Play />}
       {activeScreen == "market" && <Market />}
-      {activeScreen == "daily-market" && <DailyMarketC setActiveScreen={setActiveScreen} inventorySystem={inventorySystemRef.current} />}
-      {activeScreen == "inventory" && <InventoryC setActiveScreen={setActiveScreen} inventorySystem={inventorySystemRef.current} />}
+      {activeScreen == "daily-market" && (
+        <DailyMarketC setActiveScreen={setActiveScreen} inventorySystem={inventorySystemRef.current} setInventoryUpdated={setInventoryUpdated} />
+      )}
+      {activeScreen == "inventory" && (
+        <InventoryC setActiveScreen={setActiveScreen} inventorySystem={inventorySystemRef.current} inventoryUpdated={inventoryUpdated} />
+      )}
       {activeScreen == "settings" && <Settings />}
 
       <ToastContainer />
