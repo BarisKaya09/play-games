@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { faBolt, faCaretLeft, faCoins, faCrosshairs, faDroplet, faHeart, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import LoadAnimate from "../../LoadAnimate";
 import type { ActiveScreen } from "./EndOfTheWorld";
+import { ItemTypeTag } from "./ui";
 
 type InventoryGridProps = {
   item: InvGrid;
@@ -81,6 +82,13 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ item, inventorySystem, se
         {!item.empty && item.inventoryItem && "stackable" in item.inventoryItem.item && item.inventoryItem.item.stackable && (
           <div className="absolute w-5 h-8 text-slate-400 text-md font-bold right-2 -bottom-2">x{getItemStack()}</div>
         )}
+
+        {!item.empty && item.inventoryItem && (
+          <div className="absolute -left-10 top-13 -rotate-90">
+            <ItemTypeTag itemType={item.inventoryItem.item.itemType} />
+          </div>
+        )}
+
         <div className="w-full h-full text-center flex flex-col justify-center">
           <span>{item.inventoryItem?.item.name}</span>
           {!item.empty && <img src={getItemImg(item.inventoryItem?.item.name || "")} className="w-[160px] h-[110px] select-none m-auto -z-10" />}

@@ -1,3 +1,5 @@
+import type { ItemType } from "./types";
+
 type MenuButtonProps = {
   children: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -8,4 +10,11 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ children, onClick }) => 
       {children}
     </button>
   );
+};
+
+type ItemTypeTag = {
+  itemType: ItemType;
+};
+export const ItemTypeTag: React.FC<ItemTypeTag> = ({ itemType }) => {
+  return <div className="w-20 h-5 rounded-xl text-sm px-1 bg-zinc-800 text-center">{itemType.length > 7 ? itemType.slice(0, 7) + "..." : itemType}</div>;
 };
